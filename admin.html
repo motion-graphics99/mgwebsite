@@ -133,15 +133,23 @@
 
                     <!-- Right Column -->
                     <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">Category</label>
-                            <select id="p-category" required
-                                class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:bg-white outline-none transition-all">
-                                <option value="wedding">Wedding Cards</option>
-                                <option value="social">Social Media</option>
-                                <option value="business">Business Cards</option>
-                                <option value="packaging">Packaging / Boxes</option>
-                            </select>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">Category</label>
+                                <select id="p-category" required
+                                    class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:bg-white outline-none transition-all">
+                                    <option value="wedding">Wedding Cards</option>
+                                    <option value="social">Social Media</option>
+                                    <option value="business">Business Cards</option>
+                                    <option value="packaging">Packaging / Boxes</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">Envelope Price</label>
+                                <input type="number" id="p-env-price" placeholder="45"
+                                    class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-accent focus:bg-white outline-none transition-all"
+                                    title="Leave empty if not applicable">
+                            </div>
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-1">Tag / Size (Shows on
@@ -176,6 +184,67 @@
                         <div id="submit-spinner" class="loader hidden"
                             style="width: 16px; height: 16px; border-width: 2px;"></div>
                     </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Manage Products Section -->
+        <div class="bg-white p-6 rounded-2xl shadow-xl mt-6 overflow-hidden flex flex-col max-h-[50vh]">
+            <h2
+                class="text-lg font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2 flex justify-between items-center">
+                <span>Manage Database Products</span>
+                <span class="text-xs font-normal text-slate-500">(Hardcoded HTML products are not shown here)</span>
+            </h2>
+            <div class="overflow-y-auto custom-scrollbar flex-grow">
+                <table class="w-full text-left text-sm text-slate-600">
+                    <thead class="bg-slate-50 sticky top-0 z-10">
+                        <tr>
+                            <th class="py-3 px-4 rounded-tl-lg font-bold">Image</th>
+                            <th class="py-3 px-4 font-bold">Code / Title</th>
+                            <th class="py-3 px-4 font-bold">Category</th>
+                            <th class="py-3 px-4 font-bold">Price</th>
+                            <th class="py-3 px-4 font-bold text-right rounded-tr-lg">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body" class="divide-y divide-slate-100">
+                        <!-- Populated by JS -->
+                        <tr>
+                            <td colspan="5" class="py-8 text-center text-slate-400">Loading products...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal Overlay -->
+    <div id="edit-modal"
+        class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex-col items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md">
+            <h3 class="text-lg font-bold mb-4">Edit Product Price & Tag</h3>
+            <form id="edit-product-form" class="space-y-4">
+                <input type="hidden" id="edit-id">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">New Price (Rs.)</label>
+                    <input type="number" id="edit-price" required
+                        class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-accent">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Envelope Additional Price (Rs.)</label>
+                    <input type="number" id="edit-env-price" placeholder="45"
+                        class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-accent">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Tag / Size</label>
+                    <input type="text" id="edit-tag" required
+                        class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-accent">
+                </div>
+                <div class="flex gap-3 justify-end pt-4">
+                    <button type="button" id="cancel-edit-btn"
+                        class="px-4 py-2 text-slate-500 hover:bg-slate-100 rounded-lg font-medium transition-colors">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-brand-accent text-white hover:bg-[#6bc020] rounded-lg font-bold transition-colors">Save
+                        Changes</button>
                 </div>
             </form>
         </div>

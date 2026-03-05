@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     else if (data.tag.toLowerCase().includes('a4')) sizeAttr = 'data-size="a4"';
                 }
 
+                const envHtml = data.envPrice ? `<span class="text-[10px] font-bold text-brand-accent mt-0.5 inline-block">+Rs. ${data.envPrice} for Envelope</span>` : '';
+
                 const productHTML = `
                 <div class="portfolio-item bg-white/90 backdrop-blur-sm rounded-xl overflow-hidden card-hover border border-white flex flex-col group shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative"
                     data-category="${data.category}" ${sizeAttr}>
@@ -39,6 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <div class="flex flex-col">
                                 <span class="text-slate-400 text-[10px] font-bold decoration-slate-300 line-through">Rs. ${data.oldPrice}</span>
                                 <span class="text-brand-accent font-black text-xl leading-none mt-1">Rs. ${data.newPrice}</span>
+                                ${envHtml}
                             </div>
                             <a href="https://wa.me/94787354843" target="_blank"
                                 class="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-brand-accent hover:text-white hover:border-brand-accent transition-all shadow-sm group/btn relative z-30"
@@ -58,6 +61,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const slider = document.getElementById(sliderId);
 
                 if (slider) {
+                    const envHtml = data.envPrice ? `<span class="text-[9px] font-bold text-brand-accent mt-0.5 inline-block">+Rs. ${data.envPrice} Envelope</span>` : '';
+
                     const indexHTML = `
                      <div class="min-w-[180px] w-[180px] sm:min-w-[200px] sm:w-[200px] md:min-w-[220px] md:w-[220px] snap-start bg-white rounded-xl overflow-hidden card-hover border border-slate-100 flex flex-col group shadow-[0_4px_20px_rgb(0,0,0,0.04)] relative">
                         <div class="relative aspect-[4/5] overflow-hidden product-image-container bg-slate-50/50">
@@ -73,9 +78,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <div class="text-[9px] text-slate-400 mb-1 font-bold tracking-wider uppercase">${data.code}</div>
                             <h4 class="text-sm font-bold text-slate-900 mb-1 group-hover:text-brand-accent transition-colors leading-tight line-clamp-2">${data.title}</h4>
                             <div class="mt-auto pt-3 border-t border-slate-50 relative">
-                                <div class="flex flex-col gap-0">
+                                <div class="flex flex-col gap-0 w-4/5">
                                     <span class="text-slate-400 font-bold text-[10px] line-through decoration-slate-300">Rs. ${data.oldPrice}</span>
-                                    <span class="text-brand-accent font-black text-lg leading-none">Rs. ${data.newPrice}</span>
+                                    <span class="text-brand-accent font-black text-lg leading-none mt-1">Rs. ${data.newPrice}</span>
+                                    ${envHtml}
                                 </div>
                                 <a href="https://wa.me/94787354843" target="_blank" class="absolute right-0 bottom-0 w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-brand-accent hover:text-white hover:border-brand-accent transition-all shadow-sm group/btn" title="Buy Now">
                                     <i class='bx bx-shopping-bag text-lg group-hover/btn:scale-110 transition-transform'></i>
