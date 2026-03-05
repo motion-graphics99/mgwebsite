@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion Graphic Studio | Minimalist Design Portfolio</title>
+    <meta name="description" content="Minimalist Graphic Design Portfolio featuring Wedding Invitations & Products.">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Boxicons for modern icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Tailwind Config Customization -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            accent: '#7dd329',
+                            dark: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body
+    class="bg-gradient-to-br from-blue-50/50 via-slate-50 to-indigo-100/40 flex flex-col min-h-screen relative overflow-x-hidden">
+    <!-- Soft Background Overlay -->
+    <div class="fixed inset-0 bg-soft-gradient -z-10 w-full h-full pointer-events-none"></div>
+
+    <!-- Navigation -->
+    <nav id="main-nav"
+        class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent py-4 text-slate-900 border-b border-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="index.html" class="flex items-center gap-3">
+                        <img src="assets/img/logo.png" alt="Motion Graphics Studio" class="h-12 object-contain">
+                        <div class="flex flex-col">
+                            <span
+                                class="font-['Playfair_Display'] font-black italic text-[22px] leading-none tracking-wide text-slate-900">MOTION</span>
+                            <span
+                                class="font-sans text-[10px] text-brand-accent font-bold tracking-[0.3em] uppercase mt-[4px]">Graphics</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-10 items-center h-full">
+                    <a href="index.html"
+                        class="text-brand-accent font-medium pb-1 border-b-2 border-brand-accent h-full flex items-center">Home</a>
+
+                    <!-- Dropdown Nav -->
+                    <div class="nav-item group relative h-full flex items-center cursor-pointer">
+                        <a href="products.html"
+                            class="text-slate-600 hover:text-brand-accent transition-colors flex items-center gap-1 font-medium">
+                            Products <i class='bx bx-chevron-down text-lg'></i>
+                        </a>
+                        <div
+                            class="dropdown-menu absolute top-full mt-0 left-0 w-56 bg-white rounded-xl shadow-xl border border-slate-100 flex flex-col p-2 z-[60]">
+                            <a href="products.html?filter=wedding"
+                                class="px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-accent rounded-lg transition-colors font-medium">Wedding
+                                Cards</a>
+                            <a href="products.html?filter=business"
+                                class="px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-accent rounded-lg transition-colors font-medium">Business
+                                Cards</a>
+                            <a href="products.html?filter=social"
+                                class="px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-accent rounded-lg transition-colors font-medium">Social
+                                Media</a>
+                            <a href="products.html?filter=packaging"
+                                class="px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-accent rounded-lg transition-colors font-medium">Packaging
+                                & Boxes</a>
+                        </div>
+                    </div>
+
+                    <a href="contact.html"
+                        class="text-slate-600 hover:text-brand-accent transition-colors font-medium">Contact</a>
+                    <a href="products.html"
+                        class="btn-primary px-6 py-2 rounded-full font-bold text-sm shadow-sm text-white border border-brand-accent hover:border-transparent">
+                        Shop Now
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-800 focus:outline-none p-2">
+                        <i class='bx bx-menu text-3xl'></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-white border-b border-slate-100 absolute w-full left-0 z-40 shadow-lg mt-2">
+            <div class="px-4 py-6 space-y-4 text-center">
+                <a href="index.html" class="block text-brand-accent font-medium text-lg">Home</a>
+                <div class="text-center">
+                    <a href="products.html"
+                        class="block text-slate-600 hover:text-brand-accent text-lg transition-colors mb-2 font-medium">Products</a>
+                    <div class="flex flex-col bg-slate-50 py-2 rounded-lg border border-slate-100">
+                        <a href="products.html?filter=wedding"
+                            class="py-2 text-slate-500 hover:text-brand-accent text-sm">Wedding Cards</a>
+                        <a href="products.html?filter=business"
+                            class="py-2 text-slate-500 hover:text-brand-accent text-sm">Business Cards</a>
+                        <a href="products.html?filter=social"
+                            class="py-2 text-slate-500 hover:text-brand-accent text-sm">Social Media</a>
+                        <a href="products.html?filter=packaging"
+                            class="py-2 text-slate-500 hover:text-brand-accent text-sm">Cake Boxes</a>
+                    </div>
+                </div>
+                <a href="contact.html"
+                    class="block text-slate-600 hover:text-brand-accent text-lg transition-colors font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-24 relative overflow-hidden flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Text Content -->
+                <div class="text-center lg:text-left z-10 pt-10">
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-sm font-medium text-slate-600 mb-8 shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
+                        Premium Graphic Designs
+                    </div>
+                    <h1
+                        class="font-['Playfair_Display'] text-5xl md:text-6xl lg:text-7xl font-black italic tracking-tight mb-6 leading-tight text-slate-900">
+                        Visual <br>
+                        <span
+                            class="text-brand-accent not-italic font-sans font-black tracking-normal">Masterpieces.</span>
+                    </h1>
+                    <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed font-medium">
+                        Transforming concepts into stunning graphics. Specializing in premium Wedding Invitations,
+                        modern Business Identities, and Visual Branding.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="products.html"
+                            class="btn-primary px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 shadow-lg z-20">
+                            Explore Collection <i class='bx bx-right-arrow-alt text-xl'></i>
+                        </a>
+                        <a href="contact.html"
+                            class="px-8 py-4 rounded-full bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-all flex items-center justify-center gap-2 text-sm shadow-sm z-20">
+                            Contact Us
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Image Layout (Sleek Red-Forward Floating Style) -->
+                <div
+                    class="relative w-full aspect-square md:aspect-video lg:aspect-square flex items-center justify-center z-0 perspective-1000">
+
+                    <!-- Floating Image Background 1 -->
+                    <div
+                        class="absolute left-0 bottom-10 w-2/5 md:w-[45%] z-10 transition-transform duration-700 hover:-translate-x-4 hover:scale-105 group/hero shadow-xl rounded-2xl transform object-contain rotate-[-5deg]">
+                        <img src="assets/img/hero-3.png" alt="Gold Element"
+                            class="w-full h-auto object-contain rounded-2xl opacity-90 border-4 border-white">
+                    </div>
+
+                    <!-- Floating Image Background 2 -->
+                    <div
+                        class="absolute right-0 top-10 w-[45%] z-20 transition-transform duration-700 hover:translate-x-4 hover:scale-105 group/hero shadow-2xl rounded-2xl transform object-contain rotate-[5deg]">
+                        <img src="assets/img/hero-2.png" alt="Hero Add 2"
+                            class="w-full h-auto object-contain rounded-2xl opacity-95 border-4 border-white">
+                    </div>
+
+                    <!-- Floating OVERLAY (The Red Card) -->
+                    <div
+                        class="absolute right-[15%] bottom-[15%] w-[60%] sm:w-[50%] md:w-[55%] z-30 transition-transform duration-700 hover:-translate-y-6 hover:scale-110 group/hero shadow-2xl rounded-3xl transform object-contain">
+                        <img src="assets/img/hero-1.png" alt="Hero Invite 1"
+                            class="w-full h-auto object-contain drop-shadow-[0_30px_50px_rgba(0,0,0,0.3)] rounded-3xl border border-white">
+                        <div
+                            class="absolute -top-4 -right-4 bg-brand-accent text-white font-black text-xs px-3 py-1 rounded-full shadow-lg transform rotate-12">
+                            FEATURED</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-24 bg-white/70 backdrop-blur-md border-t border-slate-100 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 font-['Playfair_Display'] italic text-slate-900">Latest
+                    Additions</h2>
+                <div class="w-16 h-1 bg-brand-accent mx-auto mb-6 rounded-full"></div>
+                <p class="text-slate-500 max-w-2xl mx-auto">Discover our handcrafted premium templates.</p>
+            </div>
+
+            <!-- Product Slider Container -->
+            <div class="relative group/slider">
+                <div class="flex overflow-x-auto gap-8 pb-8 snap-x snap-mandatory custom-scrollbar"
+                    id="home-product-slider">
+
+                    <!-- Product 1: Wedding -->
+                    <div
+                        class="min-w-[280px] sm:min-w-[320px] snap-start bg-white rounded-xl overflow-hidden card-hover border border-slate-100 flex flex-col group shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative">
+                        <div class="relative aspect-[4/5] overflow-hidden product-image-container bg-slate-50/50">
+                            <div
+                                class="absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center cursor-zoom-in">
+                                <div
+                                    class="w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-slate-900 shadow-lg transform scale-50 group-hover:scale-100 transition-all pointer-events-none">
+                                    <i class='bx bx-search-alt-2 text-2xl'></i>
+                                </div>
+                            </div>
+                            <img src="assets/img/wca601.jpg" alt="Soft Pattern Invite"
+                                class="w-full h-full object-contain p-2 relative z-0">
+                            <div
+                                class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-xs font-bold px-3 py-1 rounded-full shadow-sm text-slate-700 z-20 pointer-events-none">
+                                A6 Size</div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="text-[11px] text-slate-400 mb-2 font-bold tracking-wider uppercase">WCA602</div>
+                            <h4
+                                class="text-lg font-bold text-slate-900 mb-2 group-hover:text-brand-accent transition-colors leading-tight line-clamp-2">
+                                Soft Pattern Invite</h4>
+                            <div class="mt-auto pt-4 border-t border-slate-50 relative">
+                                <div class="flex flex-col gap-0">
+                                    <span class="text-slate-400 font-bold text-xs line-through decoration-slate-300">Rs.
+                                        50</span>
+                                    <span class="text-brand-accent font-black text-2xl leading-none">Rs. 35</span>
+                                </div>
+                                <a href="#"
+                                    class="absolute right-0 bottom-0 w-12 h-12 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-brand-accent hover:text-white hover:border-brand-accent transition-all shadow-sm group/btn"
+                                    title="Buy Now">
+                                    <i
+                                        class='bx bx-shopping-bag text-2xl group-hover/btn:scale-110 transition-transform'></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 2: Social Media -->
+                    <div
+                        class="min-w-[280px] sm:min-w-[320px] snap-start bg-white rounded-xl overflow-hidden card-hover border border-slate-100 flex flex-col group shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative">
+                        <div class="relative aspect-[4/5] overflow-hidden product-image-container bg-slate-50/50">
+                            <div
+                                class="absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center cursor-zoom-in">
+                                <div
+                                    class="w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-slate-900 shadow-lg transform scale-50 group-hover:scale-100 transition-all pointer-events-none">
+                                    <i class='bx bx-search-alt-2 text-2xl'></i>
+                                </div>
+                            </div>
+                            <img src="assets/img/sm1.jpg" alt="Educational Diploma Poster"
+                                class="w-full h-full object-contain p-2 relative z-0">
+                            <div
+                                class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-xs font-bold px-3 py-1 rounded-full shadow-sm text-slate-700 z-20 pointer-events-none">
+                                Promo</div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="text-[11px] text-slate-400 mb-2 font-bold tracking-wider uppercase">SM-P01</div>
+                            <h4
+                                class="text-lg font-bold text-slate-900 mb-2 group-hover:text-brand-accent transition-colors leading-tight line-clamp-2">
+                                Educational Diploma Poster</h4>
+                            <div class="mt-auto pt-4 border-t border-slate-50 relative">
+                                <div class="flex flex-col gap-0">
+                                    <span class="text-slate-400 font-bold text-xs line-through decoration-slate-300">Rs.
+                                        1500</span>
+                                    <span class="text-brand-accent font-black text-2xl leading-none">Rs. 1000</span>
+                                </div>
+                                <a href="#"
+                                    class="absolute right-0 bottom-0 w-12 h-12 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-brand-accent hover:text-white hover:border-brand-accent transition-all shadow-sm group/btn"
+                                    title="Buy Now">
+                                    <i
+                                        class='bx bx-shopping-bag text-2xl group-hover/btn:scale-110 transition-transform'></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 3: Packaging -->
+                    <div
+                        class="min-w-[280px] sm:min-w-[320px] snap-start bg-white rounded-xl overflow-hidden card-hover border border-slate-100 flex flex-col group shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative">
+                        <div
+                            class="relative aspect-[4/5] overflow-hidden product-image-container bg-slate-50/50 flex flex-col items-center justify-center text-slate-300 group-hover:text-brand-accent transition-colors">
+                            <i class='bx bx-package text-6xl drop-shadow-sm'></i>
+                            <span class="font-bold text-sm text-slate-400 mt-4">Box Mockup</span>
+                            <div
+                                class="absolute top-4 left-4 bg-white/95 text-slate-700 backdrop-blur-sm text-xs font-bold px-3 py-1 rounded-full shadow-sm z-20 pointer-events-none">
+                                Packaging</div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="text-[11px] text-slate-400 mb-2 font-bold tracking-wider uppercase">MG-P001
+                            </div>
+                            <h4
+                                class="text-lg font-bold text-slate-900 mb-2 group-hover:text-brand-accent transition-colors leading-tight line-clamp-2">
+                                Minimalist Cake Box</h4>
+                            <div class="mt-auto pt-4 border-t border-slate-50 relative">
+                                <div class="flex flex-col gap-0">
+                                    <span class="text-slate-400 font-bold text-xs line-through decoration-slate-300">Rs.
+                                        80</span>
+                                    <span class="text-brand-accent font-black text-2xl leading-none">Rs. 60</span>
+                                </div>
+                                <a href="#"
+                                    class="absolute right-0 bottom-0 w-12 h-12 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-brand-accent hover:text-white hover:border-brand-accent transition-all shadow-sm group/btn"
+                                    title="Buy Now">
+                                    <i
+                                        class='bx bx-shopping-bag text-2xl group-hover/btn:scale-110 transition-transform'></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 4: Business Card -->
+                    <div
+                        class="min-w-[280px] sm:min-w-[320px] snap-start bg-white rounded-xl overflow-hidden card-hover border border-slate-100 flex flex-col group shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative">
+                        <div
+                            class="relative aspect-[4/5] overflow-hidden product-image-container bg-slate-50/50 flex flex-col items-center justify-center text-slate-300 group-hover:text-brand-accent transition-colors">
+                            <i class='bx bx-id-card text-6xl drop-shadow-sm'></i>
+                            <span class="font-bold text-sm text-slate-400 mt-4">Card Mockup</span>
+                            <div
+                                class="absolute top-4 left-4 bg-white/95 text-slate-700 backdrop-blur-sm text-xs font-bold px-3 py-1 rounded-full shadow-sm z-20 pointer-events-none">
+                                Card</div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="text-[11px] text-slate-400 mb-2 font-bold tracking-wider uppercase">MG-B001
+                            </div>
+                            <h4
+                                class="text-lg font-bold text-slate-900 mb-2 group-hover:text-brand-accent transition-colors leading-tight line-clamp-2">
+                                Typographic Card</h4>
+                            <div class="mt-auto pt-4 border-t border-slate-50 relative">
+                                <div class="flex flex-col gap-0">
+                                    <span class="text-slate-400 font-bold text-xs line-through decoration-slate-300">Rs.
+                                        30</span>
+                                    <span class="text-brand-accent font-black text-2xl leading-none">Rs. 20</span>
+                                </div>
+                                <a href="#"
+                                    class="absolute right-0 bottom-0 w-12 h-12 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-brand-accent hover:text-white hover:border-brand-accent transition-all shadow-sm group/btn"
+                                    title="Buy Now">
+                                    <i
+                                        class='bx bx-shopping-bag text-2xl group-hover/btn:scale-110 transition-transform'></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Navigation Arrow -->
+                <button id="slide-next"
+                    class="absolute right-0 top-[40%] translate-x-1/3 w-14 h-14 bg-white rounded-full shadow-2xl flex items-center justify-center text-slate-900 hover:bg-brand-accent hover:text-white transition-all z-20 opacity-0 group-hover/slider:opacity-100 hidden md:flex border border-slate-100 focus:outline-none">
+                    <i class='bx bx-chevron-right text-3xl'></i>
+                </button>
+            </div>
+
+            <div class="mt-16 text-center">
+                <a href="products.html"
+                    class="inline-flex items-center gap-2 px-8 py-4 border-2 border-slate-900 text-slate-900 rounded-full font-bold hover:bg-slate-900 hover:text-white transition-all shadow-sm">
+                    View All Designs <i class='bx bx-right-arrow-alt text-xl'></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simple CTA -->
+    <section class="py-20 bg-slate-50 border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="font-['Playfair_Display'] text-3xl md:text-5xl font-bold mb-6 italic text-slate-900">Need a
+                Custom Design?</h2>
+            <p class="text-slate-500 mb-8 max-w-xl mx-auto text-lg">Let me curate something special and unique for your
+                brand or event.</p>
+            <a href="https://wa.me/94787354843" target="_blank"
+                class="inline-flex items-center gap-2 px-8 py-4 bg-[#25D366] text-white rounded-full font-bold hover:bg-[#128C7E] transition-all shadow-lg shadow-[#25D366]/20">
+                <i class='bx bxl-whatsapp text-2xl'></i> Send a Message
+            </a>
+        </div>
+    </section>
+
+    <!-- Comprehensive Dark Footer -->
+    <footer class="bg-slate-950 border-t border-slate-900 pt-16 pb-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <!-- Brand Info -->
+                <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                    <a href="index.html" class="flex items-center gap-3 mb-4 group">
+                        <img src="assets/img/logo.png" alt="Logo"
+                            class="h-12 object-contain brightness-0 invert opacity-80 group-hover:opacity-100 transition-all">
+                        <div class="flex flex-col text-left">
+                            <span
+                                class="font-['Playfair_Display'] font-black italic text-[20px] text-white leading-none tracking-wide">MOTION</span>
+                            <span
+                                class="font-sans text-[10px] text-brand-accent font-bold tracking-[0.2em] uppercase mt-[4px]">Graphics</span>
+                        </div>
+                    </a>
+                    <p class="text-slate-400 text-sm leading-relaxed max-w-xs">
+                        Crafting premium minimalist visual identities, invitations, and packaging.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="flex flex-col items-center md:items-start">
+                    <h4 class="font-bold text-white mb-6 font-heading tracking-wide">Quick Links</h4>
+                    <ul class="space-y-3 text-center md:text-left">
+                        <li><a href="index.html"
+                                class="text-slate-400 hover:text-brand-accent font-medium text-sm transition-colors">Home</a>
+                        </li>
+                        <li><a href="products.html"
+                                class="text-slate-400 hover:text-brand-accent font-medium text-sm transition-colors">All
+                                Products</a></li>
+                        <li><a href="products.html?filter=wedding"
+                                class="text-slate-400 hover:text-brand-accent font-medium text-sm transition-colors">Wedding
+                                Cards</a></li>
+                        <li><a href="contact.html"
+                                class="text-slate-400 hover:text-brand-accent font-medium text-sm transition-colors">Contact
+                                Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info & Socials -->
+                <div class="flex flex-col items-center md:items-start">
+                    <h4 class="font-bold text-white mb-6 font-heading tracking-wide">Get in Touch</h4>
+                    <ul class="space-y-3 mb-6 text-center md:text-left w-full">
+                        <li class="flex items-center justify-center md:justify-start gap-3 text-sm text-slate-400">
+                            <i class='bx bx-phone text-brand-accent text-lg'></i>
+                            <a href="https://wa.me/94787354843" class="hover:text-brand-accent transition-colors">+94 78
+                                735 4843</a>
+                        </li>
+                        <li class="flex items-center justify-center md:justify-start gap-3 text-sm text-slate-400">
+                            <i class='bx bx-envelope text-brand-accent text-lg'></i>
+                            <a href="mailto:graphicsmotionstudio99@gmail.com"
+                                class="hover:text-brand-accent transition-colors">graphicsmotionstudio99@gmail.com</a>
+                        </li>
+                    </ul>
+
+                    <div class="flex space-x-3">
+                        <a href="https://www.facebook.com/motiongraphicc" target="_blank"
+                            class="w-10 h-10 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-brand-accent hover:border-brand-accent transition-all shadow-sm">
+                            <i class='bx bxl-facebook text-lg'></i>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-brand-accent hover:border-brand-accent transition-all shadow-sm">
+                            <i class='bx bxl-instagram text-lg'></i>
+                        </a>
+                        <a href="https://wa.me/94787354843" target="_blank"
+                            class="w-10 h-10 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#25D366] hover:border-[#25D366] transition-all shadow-sm">
+                            <i class='bx bxl-whatsapp text-lg'></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center text-sm text-slate-500 border-t border-slate-800 pt-8 mt-4 font-medium">
+                &copy; <span id="year"></span> Motion Graphic Studio. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Design Lightbox Image Modal -->
+    <div id="image-lightbox" style="display: none;"
+        class="modal-backdrop fixed inset-0 z-[100] items-center justify-center bg-slate-900/95 p-4 transition-opacity">
+        <button id="lightbox-close"
+            class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-brand-accent transition-colors z-[101]">
+            <i class='bx bx-x text-3xl'></i>
+        </button>
+        <div
+            class="modal-content relative max-w-5xl max-h-[90vh] w-full flex items-center justify-center pointer-events-none">
+            <img id="lightbox-img" src="" alt="Enlarged Design"
+                class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl pointer-events-auto border border-white/10 p-2">
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
