@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Admin Dashboard | Motion Graphic Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            accent: '#7dd329',
+                            dark: '#0f172a',
+                            light: '#f2fce8' // A very light version of the brand color for backgrounds
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #7dd329;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Hide scrollbar for clean look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .sidebar-link.active {
+            background-color: #f2fce8;
+            color: #7dd329;
+            border-right: 4px solid #7dd329;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans h-screen overflow-hidden flex">
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay"
+        class="fixed inset-0 bg-white/90 backdrop-blur z-[100] flex flex-col items-center justify-center">
+        <div class="loader mb-4 w-12 h-12 border-4"></div>
+        <p class="text-slate-500 font-medium tracking-wide">Initializing Dashboard...</p>
+    </div>
+
+    <!-- Login Section -->
+    <div id="login-section" class="fixed inset-0 bg-slate-900 z-50 flex flex-col items-center justify-center hidden">
+        <!-- Beautiful Modern Login -->
+        <div class="w-full max-w-md bg-white p-10 rounded-3xl shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-brand-accent"></div>
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-black italic font-['Playfair_Display'] text-slate-900 mb-2">MOTION <span
+                        class="text-brand-accent">Admin</span></h1>
+                <p class="text-slate-500 text-sm font-medium">Secure Access Portal</p>
+            </div>
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email
+                        Address</label>
+                    <div class="relative">
+                        <i class='bx bx-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg'></i>
+                        <input type="email" id="login-email" required
+                            class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Password</label>
+                    <div class="relative">
+                        <i class='bx bx-lock-alt absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg'></i>
+                        <input type="password" id="login-password" required
+                            class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all">
+                    </div>
+                </div>
+                <div id="login-error"
+                    class="bg-red-50 text-red-500 p-3 rounded-lg text-sm hidden font-medium text-center"></div>
+                <button type="submit"
+                    class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl transition-colors shadow-lg flex justify-center items-center gap-2 mt-4">
+                    <span id="login-btn-text">Authenticate</span>
+                    <div id="login-spinner" class="loader hidden" style="width: 18px; height: 18px; border-width: 2px;">
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Application (Hidden until auth) -->
+    <div id="admin-app" class="w-full h-full flex hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shadow-sm z-20 transition-all duration-300">
+            <div class="p-6 border-b border-slate-100 flex items-center gap-3">
+                <div
+                    class="w-10 h-10 bg-brand-accent rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md border-b-4 border-[#6bc020]">
+                    M</div>
+                <div>
+                    <h2 class="font-black text-slate-900 leading-tight">Motion Studio</h2>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Admin Control</p>
+                </div>
+            </div>
+
+            <div class="p-4 flex-grow overflow-y-auto">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3 ml-2">Menu</p>
+                <nav class="space-y-1" id="sidebar-nav">
+                    <a href="#" data-view="dashboard"
+                        class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 font-semibold hover:bg-slate-50 transition-all">
+                        <i class='bx bx-grid-alt text-xl'></i> Dashboard
+                    </a>
+                    <a href="#" data-view="products"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 font-semibold hover:bg-slate-50 transition-all">
+                        <i class='bx bx-box text-xl'></i> Manage Products
+                    </a>
+                    <a href="#" data-view="categories"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 font-semibold hover:bg-slate-50 transition-all">
+                        <i class='bx bx-category-alt text-xl'></i> Categories
+                    </a>
+                </nav>
+            </div>
+
+            <div class="p-4 border-t border-slate-100">
+                <button id="logout-btn"
+                    class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-slate-500 font-bold hover:bg-red-50 hover:text-red-500 transition-colors">
+                    <i class='bx bx-log-out text-lg'></i> Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow bg-[#F8FAFC] flex flex-col h-full overflow-hidden relative">
+            <!-- Topbar -->
+            <header
+                class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 flex-shrink-0 z-10">
+                <div>
+                    <h1 id="topbar-title" class="text-2xl font-bold text-slate-800">Overview</h1>
+                    <p id="topbar-subtitle" class="text-sm text-slate-500">Welcome to your store dashboard.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" target="_blank"
+                        class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-bold transition-colors flex items-center gap-2">
+                        <i class='bx bx-world'></i> View Website
+                    </a>
+                </div>
+            </header>
+
+            <!-- Content Scrollable Viewport -->
+            <div class="flex-grow p-8 overflow-y-auto w-full">
+
+                <!-- VIEW: DASHBOARD -->
+                <div id="view-dashboard" class="view-section space-y-8 animate-fade-in block">
+                    <!-- Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div
+                            class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 relative overflow-hidden group">
+                            <div
+                                class="w-14 h-14 bg-brand-light rounded-2xl flex items-center justify-center text-brand-accent z-10 group-hover:scale-110 transition-transform">
+                                <i class='bx bx-box text-3xl'></i>
+                            </div>
+                            <div class="z-10">
+                                <p class="text-slate-500 text-sm font-semibold">Total Products</p>
+                                <h3 class="text-3xl font-black text-slate-800" id="stat-products">-</h3>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 relative overflow-hidden group">
+                            <div
+                                class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 z-10 group-hover:scale-110 transition-transform">
+                                <i class='bx bx-category text-3xl'></i>
+                            </div>
+                            <div class="z-10">
+                                <p class="text-slate-500 text-sm font-semibold">Categories</p>
+                                <h3 class="text-3xl font-black text-slate-800" id="stat-categories">-</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mt-6">
+                        <h3 class="font-bold text-lg mb-4">Quick Actions</h3>
+                        <div class="flex flex-wrap gap-4">
+                            <button
+                                onclick="document.querySelector('[data-view=products]').click(); setTimeout(()=>openProductModal('add'), 100);"
+                                class="px-6 py-3 bg-brand-light text-brand-accent hover:bg-brand-accent hover:text-white rounded-xl font-bold transition-all flex items-center gap-2">
+                                <i class='bx bx-plus-circle'></i> Add New Product
+                            </button>
+                            <button onclick="seedMissingProducts()"
+                                class="px-6 py-3 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl font-bold transition-all flex items-center gap-2">
+                                <i class='bx bx-import'></i> Import Website Products
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: PRODUCTS -->
+                <div id="view-products" class="view-section hidden animate-fade-in">
+                    <div
+                        class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-full min-h-[500px]">
+                        <div
+                            class="p-6 border-b border-slate-100 flex justify-between items-center bg-white sticky top-0 z-10">
+                            <div>
+                                <h3 class="font-bold text-lg flex items-center gap-2">Product Catalog <span
+                                        id="lbl-total-products"
+                                        class="bg-brand-accent/10 text-brand-accent text-xs px-2 py-0.5 rounded font-black border border-brand-accent/20 shadow-sm leading-none">0</span>
+                                </h3>
+                                <p class="text-slate-500 text-xs mt-1">Manage pricing, edit details, or remove products
+                                    (Database items only).</p>
+                            </div>
+                            <button onclick="openProductModal('add')"
+                                class="bg-brand-accent hover:bg-[#6bc020] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-brand-accent/20 transition-all flex items-center gap-2">
+                                <i class='bx bx-plus'></i> Add Product
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto w-full">
+                            <table class="w-full text-left text-sm text-slate-600 min-w-[800px]">
+                                <thead
+                                    class="bg-slate-50 text-xs text-slate-500 uppercase font-bold border-b border-slate-100">
+                                    <tr>
+                                        <th class="px-6 py-4">Image & Product</th>
+                                        <th class="px-6 py-4">Prices</th>
+                                        <th class="px-6 py-4">Category</th>
+                                        <th class="px-6 py-4">Subcategory & Tag</th>
+                                        <th class="px-6 py-4 text-center">Date Added</th>
+                                        <th class="px-6 py-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="products-table-body" class="divide-y divide-slate-50">
+                                    <!-- Items injected here -->
+                                    <tr>
+                                        <td colspan="6" class="py-12 text-center text-slate-400 font-medium">Loading
+                                            products data...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: CATEGORIES -->
+                <div id="view-categories" class="view-section hidden animate-fade-in">
+                    <div
+                        class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-full min-h-[500px]">
+                        <div
+                            class="p-6 border-b border-slate-100 flex justify-between items-center bg-white sticky top-0 z-10">
+                            <div>
+                                <h3 class="font-bold text-lg">Categories</h3>
+                                <p class="text-slate-500 text-xs mt-1">Control rendering order, subcategories, and
+                                    structure.</p>
+                            </div>
+                            <button onclick="openCategoryModal('add')"
+                                class="bg-brand-accent hover:bg-[#6bc020] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-brand-accent/20 transition-all flex items-center gap-2">
+                                <i class='bx bx-plus'></i> New Category
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto w-full">
+                            <table class="w-full text-left text-sm text-slate-600 min-w-[700px]">
+                                <thead
+                                    class="bg-slate-50 text-xs text-slate-500 uppercase font-bold border-b border-slate-100">
+                                    <tr>
+                                        <th class="px-6 py-4 text-center w-24">Order</th>
+                                        <th class="px-6 py-4">Category ID & Name</th>
+                                        <th class="px-6 py-4">Subcategories</th>
+                                        <th class="px-6 py-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="categories-table-body" class="divide-y divide-slate-50">
+                                    <!-- Items injected here -->
+                                    <tr>
+                                        <td colspan="4" class="py-12 text-center text-slate-400 font-medium">Loading
+                                            categories data...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+
+    <!-- MODALS SYSTEM -->
+
+    <!-- Modal: Add / Edit Product -->
+    <div id="modal-product"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[70] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div id="modal-product-content"
+            class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col transform scale-95 transition-transform duration-300">
+            <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h3 id="modal-product-title" class="text-xl font-black italic font-['Playfair_Display'] text-slate-800">
+                    Add New Product</h3>
+                <button onclick="closeModal('modal-product')"
+                    class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors text-slate-600">
+                    <i class='bx bx-x text-xl'></i>
+                </button>
+            </div>
+            <div class="p-8 overflow-y-auto custom-scrollbar flex-grow">
+                <form id="form-product" class="space-y-6">
+                    <input type="hidden" id="p-id" value="">
+                    <input type="hidden" id="p-action" value="add">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Left Col -->
+                        <div class="space-y-4">
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Product
+                                    Title</label>
+                                <input type="text" id="p-title" required
+                                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300">
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Product
+                                    Code (SKU)</label>
+                                <input type="text" id="p-code" required
+                                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all uppercase placeholder:text-slate-300">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Old
+                                        Price (Rs)</label>
+                                    <input type="number" id="p-old-price" required
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all text-slate-500">
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 text-brand-accent">New
+                                        pt Price</label>
+                                    <input type="number" id="p-new-price" required
+                                        class="w-full px-4 py-2.5 bg-white border border-brand-accent/30 rounded-xl focus:ring-2 focus:ring-brand-accent outline-none transition-all font-bold text-slate-900 border-b-2">
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Envelope
+                                    Price (Optional)</label>
+                                <input type="number" id="p-env-price"
+                                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                                    placeholder="e.g. 45">
+                            </div>
+                        </div>
+
+                        <!-- Right Col -->
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Main
+                                        Category</label>
+                                    <select id="p-category" required
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all font-medium">
+                                        <!-- Options dynamically added by JS -->
+                                    </select>
+                                </div>
+                                <div id="subcat-container" class="opacity-50 pointer-events-none transition-opacity">
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Sub
+                                        Category</label>
+                                    <select id="p-subcategory"
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all font-medium">
+                                        <option value="">-- None --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tag
+                                        / Size Badge</label>
+                                    <input type="text" id="p-tag" required
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                                        placeholder="e.g. A6 Size, Box">
+                                </div>
+                                <div class="flex items-end pb-1">
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <div class="relative flex items-center">
+                                            <input type="checkbox" id="p-featured" class="peer sr-only">
+                                            <div
+                                                class="w-11 h-6 bg-slate-200 rounded-full peer-checked:bg-brand-accent transition-colors shadow-inner">
+                                            </div>
+                                            <div
+                                                class="absolute w-4 h-4 bg-white rounded-full left-1 top-1 peer-checked:translate-x-5 transition-transform shadow-md">
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="block text-sm font-bold text-slate-800">Featured</span>
+                                            <span class="block text-[10px] text-slate-400 leading-none mt-0.5">Show on
+                                                Homepage</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="image-upload-wrapper">
+                                <label
+                                    class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Product
+                                    Image</label>
+                                <div
+                                    class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:bg-slate-50 transition-colors relative group cursor-pointer h-[130px] flex flex-col justify-center items-center">
+                                    <input type="file" id="p-image" accept="image/*"
+                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 w-full h-full">
+                                    <i
+                                        class='bx bx-cloud-upload text-4xl text-brand-accent mb-2 group-hover:scale-110 transition-transform'></i>
+                                    <p class="text-xs text-slate-500 font-medium">Click to upload</p>
+                                    <p id="file-name"
+                                        class="text-[10px] text-slate-800 font-bold mt-2 truncate w-full px-2 hidden">
+                                    </p>
+                                </div>
+                            </div>
+                            <div id="image-preview-wrapper" class="hidden">
+                                <label
+                                    class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Current
+                                    Image</label>
+                                <div class="relative w-full h-[130px] rounded-xl border border-slate-200 overflow-hidden cursor-pointer group/img"
+                                    onclick="removeCurrentImage()" title="Click to replace image">
+                                    <img id="p-image-preview" src="" class="w-full h-full object-cover">
+                                    <div
+                                        class="absolute inset-0 bg-red-500/80 hidden opacity-0 group-hover/img:opacity-100 group-hover/img:flex items-center justify-center transition-all">
+                                        <div class="text-center text-white">
+                                            <i class='bx bx-trash text-3xl'></i>
+                                            <p class="text-xs font-bold mt-1">Replace Image</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div id="product-progress-wrapper" class="hidden mt-4">
+                        <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                            <div id="product-progress-bar"
+                                class="bg-brand-accent h-2 rounded-full transition-all duration-300" style="width: 0%">
+                            </div>
+                        </div>
+                        <p id="product-msg" class="text-xs font-bold text-center text-brand-accent mt-2"></p>
+                    </div>
+
+                    <div class="pt-6 border-t border-slate-100 flex justify-end gap-3 mt-4">
+                        <button type="button" onclick="closeModal('modal-product')"
+                            class="px-6 py-3 text-slate-600 font-bold hover:bg-slate-100 rounded-xl transition-colors">Cancel</button>
+                        <button type="submit" id="btn-save-product"
+                            class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-lg flex items-center gap-2">
+                            <span id="text-save-product">Save Product</span>
+                            <div id="spinner-save-product" class="loader hidden"
+                                style="width: 16px; height: 16px; border-width: 2px; border-top-color: white;"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Category Management -->
+    <div id="modal-category"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[70] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div id="modal-category-content"
+            class="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col transform scale-95 transition-transform duration-300">
+            <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h3 id="modal-category-title"
+                    class="text-xl font-black italic font-['Playfair_Display'] text-slate-800">Category details</h3>
+                <button onclick="closeModal('modal-category')"
+                    class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors text-slate-600">
+                    <i class='bx bx-x text-xl'></i>
+                </button>
+            </div>
+            <div class="p-8">
+                <form id="form-category" class="space-y-5">
+                    <input type="hidden" id="c-action" value="add"> <!-- "add" or "edit" -->
+                    <input type="hidden" id="c-original-id" value="">
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Category ID
+                            / Key</label>
+                        <input type="text" id="c-id" required
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                            placeholder="e.g. social_media">
+                        <p class="text-[10px] text-slate-400 mt-1" id="c-id-warning">Unique identifier. Modifying this
+                            changes the DB id.</p>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Display
+                            Name</label>
+                        <input type="text" id="c-name" required
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                            placeholder="e.g. Social Media Posts">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Display
+                                Order</label>
+                            <input type="number" id="c-order" value="1" min="1" required
+                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all">
+                        </div>
+                    </div>
+                    <div>
+                        <label
+                            class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Subcategories</label>
+                        <input type="text" id="c-subs"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                            placeholder="e.g. A4, A5, B6 (comma separated)">
+                    </div>
+
+                    <div id="cat-msg" class="text-xs font-bold text-center mt-2 hidden text-brand-accent"></div>
+
+                    <div class="pt-6 border-t border-slate-100 flex justify-end gap-3 mt-6">
+                        <button type="button" onclick="closeModal('modal-category')"
+                            class="px-6 py-3 text-slate-600 font-bold hover:bg-slate-100 rounded-xl transition-colors">Cancel</button>
+                        <button type="submit" id="btn-save-category"
+                            class="bg-brand-accent hover:bg-[#6bc020] text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-lg flex items-center gap-2">
+                            <span id="text-save-category">Save Changes</span>
+                            <div id="spinner-save-category" class="loader hidden"
+                                style="width: 16px; height: 16px; border-width: 2px; border-top-color: white;"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <!-- Ext Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/admin.js"></script>
+
+</body>
+
+</html>
