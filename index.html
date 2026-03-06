@@ -58,6 +58,29 @@
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-10 items-center h-full">
+
+                    <!-- Inline Search Component -->
+                    <div class="search-container relative flex items-center group/search mr-0">
+                        <div
+                            class="flex items-center bg-slate-100/80 rounded-full px-4 py-2 border border-slate-200 focus-within:border-brand-accent focus-within:bg-white focus-within:ring-2 focus-within:ring-brand-accent/30 transition-all w-48 lg:w-64">
+                            <i class='bx bx-search text-slate-400 text-lg mr-2'></i>
+                            <input type="text" autocomplete="off" placeholder="Search products..."
+                                class="inline-search-input w-full bg-transparent border-none outline-none text-sm font-medium text-slate-700 placeholder:text-slate-400">
+                        </div>
+
+                        <!-- Search Dropdown -->
+                        <div
+                            class="inline-search-dropdown absolute top-full left-0 right-0 mt-3 bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-slate-100 hidden flex-col overflow-hidden w-[350px] lg:w-[400px] z-[80]">
+                            <div class="inline-search-results max-h-[60vh] overflow-y-auto custom-scrollbar p-2">
+                                <!-- Results injected here -->
+                            </div>
+                            <div
+                                class="search-result-count bg-slate-50 px-3 py-2 border-t border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center">
+                                Type to search...
+                            </div>
+                        </div>
+                    </div>
+
                     <a href="index.html"
                         class="text-brand-accent font-medium pb-1 border-b-2 border-brand-accent h-full flex items-center">Home</a>
 
@@ -86,6 +109,7 @@
 
                     <a href="contact.html"
                         class="text-slate-600 hover:text-brand-accent transition-colors font-medium">Contact</a>
+
                     <a href="products.html"
                         class="btn-primary px-6 py-2 rounded-full font-bold text-sm shadow-sm text-white border border-brand-accent hover:border-transparent">
                         Shop Now
@@ -93,7 +117,11 @@
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <div class="md:hidden flex items-center">
+                <div class="md:hidden flex items-center gap-2">
+                    <button onclick="openSearchModal()"
+                        class="text-slate-800 focus:outline-none p-2 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50">
+                        <i class='bx bx-search text-2xl'></i>
+                    </button>
                     <button id="mobile-menu-btn" class="text-slate-800 focus:outline-none p-2">
                         <i class='bx bx-menu text-3xl'></i>
                     </button>
@@ -326,6 +354,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="assets/js/firebase-config.js"></script>
     <script src="assets/js/fetch-products.js"></script>
+    <script src="assets/js/search.js"></script>
     <script src="assets/js/main.js"></script>
 
 </body>

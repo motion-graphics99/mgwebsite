@@ -168,7 +168,7 @@ function setupProductsFilter(initialFilter) {
 
     function renderSubFilters(catId) {
         if (!subFiltersContainer || !window.appCategories) return;
-        
+
         const category = window.appCategories.find(c => c.id === catId);
         if (!category || !category.subcategories || category.subcategories.length === 0) {
             subFiltersContainer.innerHTML = '';
@@ -179,14 +179,14 @@ function setupProductsFilter(initialFilter) {
 
         subFiltersContainer.classList.remove('hidden');
         subFiltersContainer.classList.add('flex');
-        
+
         let html = `<button data-sub-filter="all" class="sub-filter-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all border border-slate-200 text-slate-600 hover:border-brand-accent hover:text-brand-accent active">All Items</button>`;
-        
+
         category.subcategories.forEach(sub => {
             const slug = sub.toLowerCase().replace(/\s+/g, '-');
             html += `<button data-sub-filter="${slug}" class="sub-filter-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all border border-slate-200 text-slate-600 hover:border-brand-accent hover:text-brand-accent">${sub}</button>`;
         });
-        
+
         subFiltersContainer.innerHTML = html;
 
         // Reattach sub-listeners
@@ -204,6 +204,9 @@ function setupProductsFilter(initialFilter) {
         let foundAny = false;
         const currentItems = document.querySelectorAll('.portfolio-item');
 
+        const itemsToHide = [];
+        const itemsToShow = [];
+
         currentItems.forEach(item => {
             if (!item.style.transition) {
                 item.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
@@ -220,21 +223,38 @@ function setupProductsFilter(initialFilter) {
             }
 
             if (mainMatch && subMatch) {
-                item.style.display = 'flex';
-                void item.offsetWidth;
-                item.style.opacity = '1';
-                item.style.transform = 'scale(1) translateY(0)';
+                itemsToShow.push(item);
                 foundAny = true;
             } else {
-                item.style.opacity = '0';
-                item.style.transform = 'scale(0.9) translateY(10px)';
-                setTimeout(() => {
-                    if (item.style.opacity === '0') {
-                        item.style.display = 'none';
-                    }
-                }, 400); 
+                itemsToHide.push(item);
             }
         });
+
+        // Batch visual updates to prevent layout thrashing
+        itemsToHide.forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'scale(0.9) translateY(10px)';
+        });
+
+        itemsToShow.forEach(item => {
+            item.style.display = 'flex';
+        });
+
+        // Use requestAnimationFrame for smoother paint cycle transition
+        requestAnimationFrame(() => {
+            itemsToShow.forEach(item => {
+                item.style.opacity = '1';
+                item.style.transform = 'scale(1) translateY(0)';
+            });
+        });
+
+        setTimeout(() => {
+            itemsToHide.forEach(item => {
+                if (item.style.opacity === '0') {
+                    item.style.display = 'none';
+                }
+            });
+        }, 400);
 
         if (foundAny) emptyState.classList.add('hidden');
         else emptyState.classList.remove('hidden');
@@ -250,7 +270,7 @@ function setupProductsFilter(initialFilter) {
         const subButtons = document.querySelectorAll('.sub-filter-btn');
         subButtons.forEach(b => b.classList.remove('active', 'bg-brand-accent', 'text-white', 'border-brand-accent'));
         subButtons.forEach(b => b.classList.add('text-slate-600', 'border-slate-200'));
-        
+
         const activeBtn = Array.from(subButtons).find(b => b.getAttribute('data-sub-filter') === currentSubFilter);
         if (activeBtn) {
             activeBtn.classList.remove('text-slate-600', 'border-slate-200');
@@ -271,7 +291,7 @@ function setupProductsFilter(initialFilter) {
     if (initialFilter) {
         currentMainFilter = initialFilter;
     }
-    
+
     updateMainBtnStyles();
     renderSubFilters(currentMainFilter);
     applyFilters();

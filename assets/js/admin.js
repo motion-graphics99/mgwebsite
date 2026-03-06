@@ -180,6 +180,12 @@ async function fetchData() {
 function renderDashboardStats() {
     document.getElementById('stat-products').innerText = globalProducts.length;
     document.getElementById('stat-categories').innerText = globalCategories.length;
+
+    // Update the products sub-header count
+    const lblTotalProducts = document.getElementById('lbl-total-products');
+    if (lblTotalProducts) {
+        lblTotalProducts.innerText = globalProducts.length;
+    }
 }
 
 function getCategoryName(id) {
@@ -248,48 +254,90 @@ function renderProducts() {
     }
 
     let html = '';
-    globalProducts.forEach((p) => {
-        const dateStr = p.createdAt ? p.createdAt.toDate().toLocaleDateString() : 'N/A';
-        const envCode = p.envPrice ? `<br><span class="text-[10px] text-brand-accent">+Rs.${p.envPrice} Env</span>` : '';
 
+    // Group products by category
+    const grouped = {};
+    globalProducts.forEach(p => {
+        const cat = p.category || 'uncategorized';
+        if (!grouped[cat]) grouped[cat] = [];
+        grouped[cat].push(p);
+    });
+
+    // Create a sorted list of categories
+    const sortedCatIds = Object.keys(grouped).sort((a, b) => {
+        const catA = globalCategories.find(c => c.docId === a);
+        const catB = globalCategories.find(c => c.docId === b);
+        const aOrder = catA ? catA.order : 999;
+        const bOrder = catB ? catB.order : 999;
+        return aOrder - bOrder;
+    });
+
+    sortedCatIds.forEach(catId => {
+        const catName = getCategoryName(catId);
+        const productsList = grouped[catId];
+
+        // Add Category Group Header
         html += `
-        <tr class="hover:bg-slate-50 transition-colors group">
-            <td class="px-6 py-4">
-                <div class="flex items-center gap-4">
-                    <img src="${p.imageUrl}" class="w-12 h-12 rounded-lg object-cover border border-slate-200">
-                    <div>
-                        <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">${p.code}</div>
-                        <div class="font-bold text-slate-800 line-clamp-1">${p.title}</div>
-                    </div>
-                </div>
-            </td>
-            <td class="px-6 py-4">
-                <div class="text-xs text-slate-400 line-through">Rs. ${p.oldPrice}</div>
-                <div class="font-black text-slate-800">Rs. ${p.newPrice}</div>
-                ${envCode}
-            </td>
-            <td class="px-6 py-4">
-                <div class="font-bold text-slate-700">${getCategoryName(p.category)}</div>
-            </td>
-            <td class="px-6 py-4">
-                <div class="font-bold text-sm text-slate-700">${p.subcategory || '<span class="italic text-slate-400 text-xs font-normal">None</span>'}</div>
-                <div class="inline-block mt-1 bg-slate-100 border border-slate-200 shadow-sm text-[10px] font-bold px-2 py-0.5 rounded text-slate-500">${p.tag}</div>
-            </td>
-            <td class="px-6 py-4 text-center text-slate-500 text-sm font-medium">
-                ${dateStr}
-            </td>
-            <td class="px-6 py-4 text-right">
-                <div class="flex justify-end gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                    <button onclick="openProductModal('edit', '${p.docId}')" class="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer" title="Edit">
-                        <i class='bx bx-edit text-xl'></i>
-                    </button>
-                    <button onclick="deleteProduct('${p.docId}')" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer" title="Delete">
-                        <i class='bx bx-trash text-xl'></i>
-                    </button>
+        <tr class="bg-slate-100/80 border-y border-slate-200">
+            <td colspan="6" class="px-6 py-3">
+                <div class="flex items-center gap-2">
+                    <i class='bx bx-category text-brand-accent text-lg'></i>
+                    <span class="font-bold text-slate-800 uppercase tracking-widest text-xs">${catName}</span>
+                    <span class="bg-white border border-slate-200 text-slate-600 text-[10px] px-2 py-0.5 rounded-full font-bold ml-2 shadow-sm">${productsList.length} Items</span>
                 </div>
             </td>
         </tr>`;
+
+        // Render products for this category
+        productsList.forEach((p) => {
+            const dateStr = p.createdAt ? p.createdAt.toDate().toLocaleDateString() : 'N/A';
+            const envCode = p.envPrice ? `<br><span class="text-[10px] text-brand-accent">+Rs.${p.envPrice} Env</span>` : '';
+            const statusIcon = p.isActive === false ? 'bx-toggle-left text-slate-400' : 'bx-toggle-right text-brand-accent';
+            const statusTitle = p.isActive === false ? 'Mark Active' : 'Mark Inactive';
+
+            html += `
+            <tr class="hover:bg-slate-50 transition-colors group ${p.isActive === false ? 'opacity-50' : ''}">
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-4">
+                        <img src="${p.imageUrl}" class="w-12 h-12 rounded-lg object-cover border border-slate-200">
+                        <div>
+                            <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">${p.code}</div>
+                            <div class="font-bold text-slate-800 line-clamp-1">${p.title}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <div class="text-xs text-slate-400 line-through">Rs. ${p.oldPrice}</div>
+                    <div class="font-black text-slate-800">Rs. ${p.newPrice}</div>
+                    ${envCode}
+                </td>
+                <td class="px-6 py-4">
+                    <div class="font-bold text-slate-700">${catName}</div>
+                </td>
+                <td class="px-6 py-4">
+                    <div class="font-bold text-sm text-slate-700">${p.subcategory || '<span class="italic text-slate-400 text-xs font-normal">None</span>'}</div>
+                    <div class="inline-block mt-1 bg-slate-100 border border-slate-200 shadow-sm text-[10px] font-bold px-2 py-0.5 rounded text-slate-500">${p.tag}</div>
+                </td>
+                <td class="px-6 py-4 text-center text-slate-500 text-sm font-medium">
+                    ${dateStr}
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <div class="flex justify-end gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                        <button onclick="toggleProductStatus('${p.docId}', ${p.isActive !== false})" class="p-2 text-slate-400 hover:text-brand-accent hover:bg-brand-light rounded-lg transition-colors cursor-pointer" title="${statusTitle}">
+                            <i class='bx ${statusIcon} text-xl'></i>
+                        </button>
+                        <button onclick="openProductModal('edit', '${p.docId}')" class="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer" title="Edit">
+                            <i class='bx bx-edit text-xl'></i>
+                        </button>
+                        <button onclick="deleteProduct('${p.docId}')" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer" title="Delete">
+                            <i class='bx bx-trash text-xl'></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+        });
     });
+
     tbody.innerHTML = html;
 }
 
@@ -303,8 +351,14 @@ function renderCategories() {
     let html = '';
     globalCategories.forEach((c) => {
         let subsList = Array.isArray(c.subcategories) ? c.subcategories.join(', ') : '';
+        const statusIcon = c.isActive === false ? 'bx-toggle-left text-slate-400' : 'bx-toggle-right text-brand-accent';
+        const statusTitle = c.isActive === false ? 'Mark Active' : 'Mark Inactive';
+
+        const featuredIcon = c.isFeatured === false ? 'bx-star text-slate-400' : 'bxs-star text-amber-400';
+        const featuredTitle = c.isFeatured === false ? 'Show on Home Screen' : 'Hide from Home Screen';
+
         html += `
-        <tr class="hover:bg-slate-50 transition-colors group">
+        <tr class="hover:bg-slate-50 transition-colors group ${c.isActive === false ? 'opacity-50' : ''}">
             <td class="px-6 py-4 text-center">
                 <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 font-bold text-slate-700 text-xs">
                     ${c.order || '-'}
@@ -319,6 +373,12 @@ function renderCategories() {
             </td>
             <td class="px-6 py-4 text-right">
                 <div class="flex justify-end gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                    <button onclick="toggleCategoryFeatured('${c.docId}', ${c.isFeatured !== false})" class="p-2 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-lg transition-colors cursor-pointer" title="${featuredTitle}">
+                        <i class='bx ${featuredIcon} text-xl'></i>
+                    </button>
+                    <button onclick="toggleCategoryStatus('${c.docId}', ${c.isActive !== false})" class="p-2 text-slate-400 hover:text-brand-accent hover:bg-brand-light rounded-lg transition-colors cursor-pointer" title="${statusTitle}">
+                        <i class='bx ${statusIcon} text-xl'></i>
+                    </button>
                     <button onclick="openCategoryModal('edit', '${c.docId}')" class="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer" title="Edit">
                         <i class='bx bx-edit text-xl'></i>
                     </button>
@@ -361,6 +421,7 @@ function openProductModal(action, docId = null) {
         previewWrapper.classList.add('hidden');
         document.getElementById('p-image').required = true;
         document.getElementById('p-featured').checked = false;
+        document.getElementById('image-upload-wrapper').dataset.newImageRequired = "false";
     } else {
         title.innerText = "Edit Product";
         currentProd = globalProducts.find(p => p.docId === docId);
@@ -379,6 +440,7 @@ function openProductModal(action, docId = null) {
         // Handle images
         document.getElementById('p-image').required = false;
         imgWrapper.classList.add('hidden'); // Simplified: editing keeps old image.
+        document.getElementById('image-upload-wrapper').dataset.newImageRequired = "false";
         previewWrapper.classList.remove('hidden');
         document.getElementById('p-image-preview').src = currentProd.imageUrl;
     }
@@ -446,6 +508,16 @@ document.getElementById('form-product').addEventListener('submit', async (e) => 
     msg.textContent = 'Processing...';
 
     try {
+        // Prevent Duplicates
+        const isDuplicate = globalProducts.some(p => {
+            if (action === 'edit' && p.docId === docId) return false;
+            return p.code.toLowerCase() === code.toLowerCase() || p.title.toLowerCase() === title.toLowerCase();
+        });
+
+        if (isDuplicate) {
+            throw new Error(`A product with the code '${code}' or title '${title}' already exists.`);
+        }
+
         let imageUrl = "";
 
         if (action === 'add') {
@@ -479,14 +551,37 @@ document.getElementById('form-product').addEventListener('submit', async (e) => 
             });
 
         } else if (action === 'edit') {
-            progBar.style.width = '50%';
-            msg.textContent = "Updating database...";
+            const fileInput = document.getElementById('p-image');
+            const file = fileInput.files[0];
+            const needsNewImage = document.getElementById('image-upload-wrapper').dataset.newImageRequired === "true";
 
-            await db.collection("products").doc(docId).update({
+            let updatePayload = {
                 title, code, oldPrice, newPrice,
                 envPrice: envPrice || "", category, subcategory, tag, isFeatured: Boolean(isFeatured),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            };
+
+            if (needsNewImage && file) {
+                progBar.style.width = '30%';
+                msg.textContent = "Uploading new image to secure host...";
+
+                const formData = new FormData();
+                formData.append('image', file);
+
+                const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: formData });
+                const imgbbData = await imgbbResponse.json();
+
+                if (!imgbbData.success) {
+                    throw new Error("Image Upload Failed: " + (imgbbData.error ? imgbbData.error.message : "Unknown error"));
+                }
+
+                updatePayload.imageUrl = imgbbData.data.url;
+            }
+
+            progBar.style.width = '70%';
+            msg.textContent = "Updating database...";
+
+            await db.collection("products").doc(docId).update(updatePayload);
         }
 
         progBar.style.width = '100%';
@@ -620,4 +715,67 @@ async function deleteCategory(id) {
     } catch (e) {
         alert("Failed to delete category: " + e.message);
     }
+}
+
+// ===================================
+// UTILITY ACTIONS (Status & Images)
+// ===================================
+
+async function toggleProductStatus(docId, currentStatus) {
+    const actionStr = currentStatus ? "deactivate" : "activate";
+    if (!confirm(`Are you sure you want to ${actionStr} this product?`)) return;
+    try {
+        await db.collection("products").doc(docId).update({
+            isActive: !currentStatus
+        });
+        fetchData();
+    } catch (e) {
+        alert(`Failed to ${actionStr} product: ` + e.message);
+    }
+}
+
+async function toggleCategoryStatus(docId, currentStatus) {
+    const actionStr = currentStatus ? "deactivate" : "activate";
+    if (!confirm(`Are you sure you want to ${actionStr} this category?`)) return;
+    try {
+        await db.collection("categories").doc(docId).update({
+            isActive: !currentStatus
+        });
+        fetchData();
+    } catch (e) {
+        alert(`Failed to ${actionStr} category: ` + e.message);
+    }
+}
+
+async function toggleCategoryFeatured(docId, currentStatus) {
+    const actionStr = currentStatus ? "hide from home screen" : "show on home screen";
+    if (!confirm(`Are you sure you want to ${actionStr} this category?`)) return;
+    try {
+        await db.collection("categories").doc(docId).update({
+            isFeatured: !currentStatus
+        });
+        fetchData();
+    } catch (e) {
+        alert(`Failed to update category: ` + e.message);
+    }
+}
+
+function removeCurrentImage() {
+    if (!confirm("Remove the current image and upload a new one?")) return;
+
+    document.getElementById('image-preview-wrapper').classList.add('hidden');
+    document.getElementById('image-upload-wrapper').classList.remove('hidden');
+    document.getElementById('p-image-preview').src = "";
+    document.getElementById('p-image').required = true;
+
+    // reset actual file input
+    document.getElementById('p-image').value = "";
+    document.getElementById('file-name').classList.add('hidden');
+
+    // Make sure we mark it as modified or clear the global object URL memory so it submits the fresh img
+    // The submit logic currently requires fileInput.files[0] if it's 'add', but since it's 'edit',
+    // We need to pass a property indicating a NEW image must be uploaded.
+
+    // Set a data flag on the wrapper so submit logic knows it must upload a new image
+    document.getElementById('image-upload-wrapper').dataset.newImageRequired = "true";
 }

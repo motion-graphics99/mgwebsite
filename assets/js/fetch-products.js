@@ -1,7 +1,13 @@
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Query products ordered by newest first
-        let querySnapshot = await db.collection("products").orderBy("createdAt", "desc").get();
+        const onIndex = document.getElementById('dynamic-index-categories') !== null;
+        const onProducts = document.getElementById('portfolio-grid') !== null;
+
+        // Fetch products and categories concurrently for speed
+        let [querySnapshot, catSnapshot] = await Promise.all([
+            db.collection("products").orderBy("createdAt", "desc").get(),
+            db.collection("categories").get()
+        ]);
 
         if (querySnapshot.empty) {
             const defaultProducts = [
@@ -19,21 +25,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                 { title: "Educational Post Vertical", code: "SM-P05", oldPrice: "1500", newPrice: "1000", envPrice: "", category: "social", subcategory: "Promo", tag: "Promo", isFeatured: true, imageUrl: "assets/img/sm5.jpg" }
             ];
 
-            for (let prod of defaultProducts) {
-                await db.collection("products").add({
-                    ...prod,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            }
+            const batch = db.batch();
+            defaultProducts.forEach(prod => {
+                const docRef = db.collection("products").doc();
+                batch.set(docRef, { ...prod, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+            });
+            await batch.commit();
+
             // Refetch after seeding
             querySnapshot = await db.collection("products").orderBy("createdAt", "desc").get();
         }
 
-        const onIndex = document.getElementById('dynamic-index-categories') !== null;
-        const onProducts = document.getElementById('portfolio-grid') !== null;
-
-        // --- Fetch Categories for Dynamic UI ---
-        const catSnapshot = await db.collection("categories").get();
         window.appCategories = [];
 
         if (catSnapshot.empty) {
@@ -45,8 +47,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 { id: "business", name: "Business Cards", subcategories: [], order: 4 }
             ];
 
+            const batch = db.batch();
             for (let cat of defaultCats) {
-                await db.collection("categories").doc(cat.id).set({
+                const docRef = db.collection("categories").doc(cat.id);
+                batch.set(docRef, {
                     name: cat.name,
                     subcategories: cat.subcategories,
                     order: cat.order,
@@ -54,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
                 window.appCategories.push(cat);
             }
+            await batch.commit();
         } else {
             catSnapshot.forEach(doc => window.appCategories.push({ id: doc.id, ...doc.data() }));            // Sort categories by order correctly
             window.appCategories.sort((a, b) => {
@@ -81,6 +86,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 };
 
                 window.appCategories.forEach(cat => {
+                    if (cat.isActive === false) return; // Skip inactive categories
+                    if (cat.isFeatured === false) return; // Skip unfeatured categories from showing on Home screen
+
                     indexHtml += `
                     <section class="py-6 bg-transparent relative z-10 mb-8" id="dynamic-category-${cat.id}">
                         <div class="max-w-[100rem] mx-auto">
@@ -148,6 +156,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </button>
                 `;
                 window.appCategories.forEach(cat => {
+                    if (cat.isActive === false) return; // Skip inactive categories
                     html += `
                         <button data-filter="${cat.id}" class="filter-btn filter-sidebar-item w-full text-left px-4 py-3 rounded-xl font-medium text-sm transition-all flex justify-between items-center group whitespace-nowrap">
                             ${cat.name}
@@ -162,6 +171,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         querySnapshot.forEach((doc) => {
             const data = doc.data();
 
+            // Skip inactive products completely
+            if (data.isActive === false) return;
+
             if (onProducts) {
                 // --- Products Page Logic ---
                 let sizeAttr = '';
@@ -173,7 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const envHtml = data.envPrice ? `<span class="text-[10px] font-bold text-brand-accent mt-0.5 inline-block">+Rs. ${data.envPrice} for Envelope</span>` : '';
 
                 const productHTML = `
-                <div class="portfolio-item bg-white/90 backdrop-blur-sm rounded-xl overflow-hidden card-hover border border-white flex flex-col group shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative"
+                <div id="product-${data.code}" class="portfolio-item bg-white/90 backdrop-blur-sm rounded-xl overflow-hidden card-hover border border-white flex flex-col group shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative"
                     data-category="${data.category}" ${sizeAttr}>
                     <div class="relative aspect-[4/5] overflow-hidden product-image-container bg-slate-50/50 cursor-zoom-in">
                         <div class="absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
@@ -260,6 +272,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 // Setup the products filter events and initialize
                 setupProductsFilter(filterParam);
+
+                // Highlight product if specified in URL
+                const highlightCode = urlParams.get('highlight');
+                if (highlightCode) {
+                    setTimeout(() => {
+                        const targetProduct = document.getElementById(`product-${highlightCode}`);
+                        if (targetProduct) {
+                            // Scroll to product
+                            targetProduct.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            // Highlight effect
+                            targetProduct.classList.add('ring-4', 'ring-brand-accent', 'ring-opacity-50', 'transform', 'scale-[1.02]', 'transition-all', 'duration-500');
+
+                            setTimeout(() => {
+                                targetProduct.classList.remove('ring-4', 'ring-brand-accent', 'ring-opacity-50', 'transform', 'scale-[1.02]');
+                            }, 3000);
+                        }
+                    }, 500);
+                }
             }, 100);
         }
 
