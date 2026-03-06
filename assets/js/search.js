@@ -1,7 +1,7 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     const searchInputs = document.querySelectorAll('.inline-search-input');
 
-    // Close on click outside
+    // Close dropdowns on click outside
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.search-container')) {
             document.querySelectorAll('.inline-search-dropdown').forEach(d => {
@@ -10,6 +10,56 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    // Make binding global so it can be re-run after dynamic categories load
+    window.bindSearchCheckboxEvents = function () {
+        const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
+        const labelDisplay = document.getElementById('selected-collections-label');
+        const clearBtn = document.getElementById('clear-filters');
+
+        function updateLabel() {
+            const checked = Array.from(categoryCheckboxes).filter(cb => cb.checked);
+            if (checked.length === 0) {
+                if (labelDisplay) labelDisplay.textContent = 'All Designs';
+            } else if (checked.length === 1) {
+                if (labelDisplay) labelDisplay.textContent = checked[0].parentElement.querySelector('span').textContent;
+            } else {
+                if (labelDisplay) labelDisplay.textContent = `${checked.length} Selected`;
+            }
+
+            // Trigger search update if query exists
+            searchInputs.forEach(input => {
+                if (input.value.trim().length >= 2) {
+                    const container = input.closest('.search-container');
+                    const resultsContainer = container.querySelector('.inline-search-results');
+                    const countLabel = container.querySelector('.search-result-count');
+                    performSearch(input.value.trim().toLowerCase(), resultsContainer, countLabel);
+                }
+            });
+        }
+
+        categoryCheckboxes.forEach(cb => {
+            cb.replaceWith(cb.cloneNode(true)); // Remove existing listeners
+        });
+
+        // Re-select and add new listeners
+        const newCheckboxes = document.querySelectorAll('.category-checkbox');
+        newCheckboxes.forEach(cb => {
+            cb.addEventListener('change', updateLabel);
+        });
+
+        if (clearBtn) {
+            clearBtn.replaceWith(clearBtn.cloneNode(true));
+            const newClearBtn = document.getElementById('clear-filters');
+            newClearBtn.addEventListener('click', () => {
+                document.querySelectorAll('.category-checkbox').forEach(cb => cb.checked = false);
+                updateLabel();
+            });
+        }
+    };
+
+    // Initial bind
+    window.bindSearchCheckboxEvents();
 
     let debounceTimer;
     searchInputs.forEach(input => {
@@ -40,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             resultsContainer.innerHTML = `
                 <div class="flex justify-center py-6">
-                    <i class='bx bx-loader-alt bx-spin text-2xl text-brand-accent'></i>
+                    <i class='bx bx-loader-alt bx-spin text-2xl text-emerald-500'></i>
                 </div>`;
 
             debounceTimer = setTimeout(() => performSearch(query, resultsContainer, countLabel), 400);
@@ -69,44 +119,55 @@ if (typeof db !== 'undefined') {
 async function performSearch(query, resultsContainer, countLabel) {
     try {
         if (!searchCacheInitialized) {
-            resultsContainer.innerHTML = `<div class="text-center py-6 text-slate-500 font-bold text-sm">Loading products...</div>`;
+            resultsContainer.innerHTML = `<div class="text-center py-6 text-slate-400 font-bold text-sm">Loading products...</div>`;
             return;
         }
+
+        // Get selected categories
+        const checkedCbs = Array.from(document.querySelectorAll('.category-checkbox'))
+            .filter(cb => cb.checked)
+            .map(cb => cb.value.toLowerCase());
 
         // Filter functionality
         const matched = cachedSearchProducts.filter(p => {
             const titleMatch = (p.title || "").toLowerCase().includes(query);
             const codeMatch = (p.code || "").toLowerCase().includes(query);
-            const catMatch = (p.category || "").toLowerCase().includes(query);
             const tagMatch = (p.tag || "").toLowerCase().includes(query);
-            const subcatMatch = (p.subcategory || "").toLowerCase().includes(query);
 
-            return titleMatch || codeMatch || catMatch || tagMatch || subcatMatch;
+            // Category check
+            const categoryMatches = checkedCbs.length === 0 || checkedCbs.includes((p.category || "").toLowerCase());
+
+            return (titleMatch || codeMatch || tagMatch) && categoryMatches;
         });
 
         countLabel.innerText = `${matched.length} Results`;
 
         if (matched.length === 0) {
             resultsContainer.innerHTML = `
-                <div class="text-center py-6 text-slate-500 flex flex-col items-center">
-                    <i class='bx bx-info-circle text-4xl mb-2 text-slate-300'></i>
-                    <p class="font-bold text-sm">No match for "${query}"</p>
+                <div class="text-center py-10 text-slate-400 flex flex-col items-center">
+                    <i class='bx bx-search-alt text-5xl mb-3 text-slate-200'></i>
+                    <p class="font-bold text-sm text-slate-400 uppercase tracking-widest">No match for "${query}"</p>
+                    <p class="text-xs text-slate-300 mt-1 font-medium">Try different keywords or filters</p>
                 </div>`;
             return;
         }
 
-        // Render matched products
-        let html = '<div class="flex flex-col gap-2">';
+        // Render matched products (Updated to match white theme)
+        let html = '<div class="flex flex-col gap-2 p-1">';
         matched.forEach(data => {
             html += `
-            <a href="products.html?highlight=${data.code}" class="bg-white rounded-lg p-2 flex gap-3 items-center hover:bg-slate-50 border border-transparent hover:border-brand-accent/30 transition-all group">
-                <img src="${data.imageUrl}" class="w-12 h-12 object-cover rounded bg-slate-50 border border-slate-100">
-                <div class="flex-grow flex flex-col justify-center">
-                    <div class="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">${data.code}</div>
-                    <h4 class="font-bold text-slate-900 group-hover:text-brand-accent transition-colors text-xs line-clamp-1">${data.title}</h4>
-                    <span class="text-brand-accent font-black text-sm leading-none mt-1">Rs. ${data.newPrice}</span>
+            <a href="products.html?highlight=${data.code}" class="bg-white rounded-xl p-3 flex gap-4 items-center hover:bg-slate-50 border border-slate-100 hover:border-emerald-200 transition-all group shadow-sm">
+                <div class="w-14 h-14 bg-slate-50 rounded-lg overflow-hidden flex-shrink-0 p-1">
+                    <img src="${data.imageUrl}" class="w-full h-full object-contain">
                 </div>
-                <i class='bx bx-chevron-right text-slate-300 group-hover:text-brand-accent'></i>
+                <div class="flex-grow flex flex-col justify-center">
+                    <div class="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">${data.code}</div>
+                    <h4 class="font-bold text-slate-800 group-hover:text-emerald-500 transition-colors text-xs line-clamp-1">${data.title}</h4>
+                    <span class="text-emerald-500 font-black text-sm leading-none mt-1">Rs. ${data.newPrice}</span>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                    <i class='bx bx-chevron-right text-lg'></i>
+                </div>
             </a>`;
         });
         html += '</div>';
@@ -123,3 +184,4 @@ async function performSearch(query, resultsContainer, countLabel) {
 window.openSearchModal = function () {
     alert("Mobile search is in progress. Please use the desktop search input.");
 }
+

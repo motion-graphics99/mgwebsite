@@ -53,7 +53,10 @@ function switchView(viewName) {
     const titles = {
         'dashboard': 'Overview',
         'products': 'Manage Products',
-        'categories': 'Categories Setup'
+        'categories': 'Categories Setup',
+        'homepage': 'Edit Homepage',
+        'contact': 'Contact Info',
+        'theme': 'Theme Settings'
     };
     document.getElementById('topbar-title').innerText = titles[viewName] || 'Overview';
 
@@ -278,12 +281,16 @@ function renderProducts() {
 
         // Add Category Group Header
         html += `
-        <tr class="bg-slate-100/80 border-y border-slate-200">
-            <td colspan="6" class="px-6 py-3">
-                <div class="flex items-center gap-2">
-                    <i class='bx bx-category text-brand-accent text-lg'></i>
-                    <span class="font-bold text-slate-800 uppercase tracking-widest text-xs">${catName}</span>
-                    <span class="bg-white border border-slate-200 text-slate-600 text-[10px] px-2 py-0.5 rounded-full font-bold ml-2 shadow-sm">${productsList.length} Items</span>
+        <tr class="bg-brand-accent/5">
+            <td colspan="6" class="px-6 py-5 border-t border-brand-accent/20">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-white border border-brand-accent/30 shadow-sm flex items-center justify-center text-brand-accent">
+                        <i class='bx border-brand-accent/30 bx-collection text-xl'></i>
+                    </div>
+                    <div>
+                        <span class="font-black text-slate-900 uppercase tracking-widest text-sm block leading-none">${catName} COLLECTION</span>
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1.5 block">${productsList.length} Products Registered</span>
+                    </div>
                 </div>
             </td>
         </tr>`;
@@ -436,6 +443,8 @@ function openProductModal(action, docId = null) {
         document.getElementById('p-category').value = currentProd.category;
         document.getElementById('p-tag').value = currentProd.tag;
         document.getElementById('p-featured').checked = currentProd.isFeatured || false;
+        document.getElementById('p-desc').value = currentProd.description || '';
+        document.getElementById('p-extra').value = currentProd.extraInfo || '';
 
         // Handle images
         document.getElementById('p-image').required = false;
@@ -491,6 +500,8 @@ document.getElementById('form-product').addEventListener('submit', async (e) => 
     const subcategory = document.getElementById('p-subcategory').value;
     const tag = document.getElementById('p-tag').value;
     const isFeatured = document.getElementById('p-featured').checked;
+    const description = document.getElementById('p-desc').value;
+    const extraInfo = document.getElementById('p-extra').value;
 
     const btnBase = document.getElementById('btn-save-product');
     const btnText = document.getElementById('text-save-product');
@@ -546,7 +557,8 @@ document.getElementById('form-product').addEventListener('submit', async (e) => 
             // Create
             await db.collection("products").add({
                 title, code, oldPrice, newPrice,
-                envPrice: envPrice || "", category, subcategory, tag, isFeatured: Boolean(isFeatured), imageUrl,
+                envPrice: envPrice || "", category, subcategory, tag, isFeatured: Boolean(isFeatured),
+                description, extraInfo, imageUrl,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
@@ -558,6 +570,7 @@ document.getElementById('form-product').addEventListener('submit', async (e) => 
             let updatePayload = {
                 title, code, oldPrice, newPrice,
                 envPrice: envPrice || "", category, subcategory, tag, isFeatured: Boolean(isFeatured),
+                description, extraInfo,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
@@ -779,3 +792,59 @@ function removeCurrentImage() {
     // Set a data flag on the wrapper so submit logic knows it must upload a new image
     document.getElementById('image-upload-wrapper').dataset.newImageRequired = "true";
 }
+
+// ===================================
+// SITE SETTINGS LOGIC
+// ===================================
+
+async function fetchSiteSettings() {
+    try {
+        const doc = await db.collection('siteSettings').doc('main').get();
+        if (doc.exists) {
+            const data = doc.data();
+            if (data.heroTitle) document.getElementById('site-hero-title').value = data.heroTitle;
+            if (data.heroSubtitle) document.getElementById('site-hero-subtitle').value = data.heroSubtitle;
+            if (data.waNumber) document.getElementById('site-wa-number').value = data.waNumber;
+            if (data.contactEmail) document.getElementById('site-email').value = data.contactEmail;
+        }
+    } catch (e) {
+        console.error("Failed to load settings:", e);
+    }
+}
+
+document.getElementById('form-homepage')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btnText = e.target.querySelector('button');
+    btnText.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Saving...";
+    try {
+        await db.collection('siteSettings').doc('main').set({
+            heroTitle: document.getElementById('site-hero-title').value,
+            heroSubtitle: document.getElementById('site-hero-subtitle').value
+        }, { merge: true });
+        btnText.innerHTML = "<i class='bx bx-check'></i> Saved!";
+        setTimeout(() => btnText.innerHTML = "<i class='bx bx-save'></i> Save Changes", 2000);
+    } catch (e) {
+        alert("Failed to save: " + e.message);
+        btnText.innerHTML = "<i class='bx bx-save'></i> Save Changes";
+    }
+});
+
+document.getElementById('form-contact')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btnText = e.target.querySelector('button');
+    btnText.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Saving...";
+    try {
+        await db.collection('siteSettings').doc('main').set({
+            waNumber: document.getElementById('site-wa-number').value,
+            contactEmail: document.getElementById('site-email').value
+        }, { merge: true });
+        btnText.innerHTML = "<i class='bx bx-check'></i> Saved!";
+        setTimeout(() => btnText.innerHTML = "<i class='bx bx-save'></i> Save Changes", 2000);
+    } catch (e) {
+        alert("Failed to save: " + e.message);
+        btnText.innerHTML = "<i class='bx bx-save'></i> Save Changes";
+    }
+});
+
+// Fetch settings when page loads
+document.addEventListener('DOMContentLoaded', fetchSiteSettings);

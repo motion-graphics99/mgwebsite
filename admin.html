@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -13,9 +13,9 @@
                 extend: {
                     colors: {
                         brand: {
-                            accent: '#7dd329',
-                            dark: '#0f172a',
-                            light: '#f2fce8' // A very light version of the brand color for backgrounds
+                            accent: '#10b981', // Emerald 500
+                            dark: '#0f172a',   // Slate 900
+                            light: '#f0fdf4'  // Emerald 50
                         }
                     }
                 }
@@ -23,9 +23,15 @@
         }
     </script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@1,900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
         .loader {
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #7dd329;
+            border-top: 3px solid #10b981;
             border-radius: 50%;
             width: 20px;
             height: 20px;
@@ -53,9 +59,26 @@
         }
 
         .sidebar-link.active {
-            background-color: #f2fce8;
-            color: #7dd329;
-            border-right: 4px solid #7dd329;
+            background-color: #f0fdf4;
+            color: #10b981;
+            border-right: 4px solid #10b981;
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.05);
+        }
+
+        /* Custom Input Styling */
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #10b981 !important;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1) !important;
         }
     </style>
 </head>
@@ -70,7 +93,7 @@
     </div>
 
     <!-- Login Section -->
-    <div id="login-section" class="fixed inset-0 bg-slate-900 z-50 flex flex-col items-center justify-center hidden">
+    <div id="login-section" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center hidden">
         <!-- Beautiful Modern Login -->
         <div class="w-full max-w-md bg-white p-10 rounded-3xl shadow-2xl relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-2 bg-brand-accent"></div>
@@ -84,7 +107,7 @@
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email
                         Address</label>
                     <div class="relative">
-                        <i class='bx bx-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg'></i>
+                        <i class='bx bx-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm'></i>
                         <input type="email" id="login-email" required
                             class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all">
                     </div>
@@ -92,7 +115,7 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Password</label>
                     <div class="relative">
-                        <i class='bx bx-lock-alt absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg'></i>
+                        <i class='bx bx-lock-alt absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm'></i>
                         <input type="password" id="login-password" required
                             class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all">
                     </div>
@@ -100,9 +123,10 @@
                 <div id="login-error"
                     class="bg-red-50 text-red-500 p-3 rounded-lg text-sm hidden font-medium text-center"></div>
                 <button type="submit"
-                    class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl transition-colors shadow-lg flex justify-center items-center gap-2 mt-4">
+                    class="w-full bg-brand-accent hover:bg-emerald-600 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex justify-center items-center gap-2 mt-4 hover:-translate-y-0.5">
                     <span id="login-btn-text">Authenticate</span>
-                    <div id="login-spinner" class="loader hidden" style="width: 18px; height: 18px; border-width: 2px;">
+                    <div id="login-spinner" class="loader hidden"
+                        style="width: 18px; height: 18px; border-width: 2px; border-top-color: white;">
                     </div>
                 </button>
             </form>
@@ -115,28 +139,45 @@
         <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shadow-sm z-20 transition-all duration-300">
             <div class="p-6 border-b border-slate-100 flex items-center gap-3">
                 <div
-                    class="w-10 h-10 bg-brand-accent rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md border-b-4 border-[#6bc020]">
-                    M</div>
+                    class="w-10 h-10 bg-brand-accent rounded-xl flex items-center justify-center text-white font-bold text-base shadow-lg shadow-emerald-500/20">
+                    <i class='bx bxs-dashboard text-2xl'></i>
+                </div>
                 <div>
-                    <h2 class="font-black text-slate-900 leading-tight">Motion Studio</h2>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Admin Control</p>
+                    <h2
+                        class="font-['Playfair_Display'] italic font-black text-slate-900 leading-none text-xl tracking-tight">
+                        MOTION</h2>
+                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">Admin Control</p>
                 </div>
             </div>
 
             <div class="p-4 flex-grow overflow-y-auto">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3 ml-2">Menu</p>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-3 ml-2">Menu</p>
                 <nav class="space-y-1" id="sidebar-nav">
                     <a href="#" data-view="dashboard"
                         class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 font-semibold hover:bg-slate-50 transition-all">
-                        <i class='bx bx-grid-alt text-xl'></i> Dashboard
+                        <i class='bx bx-grid-alt text-base'></i> Dashboard
                     </a>
                     <a href="#" data-view="products"
                         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 font-semibold hover:bg-slate-50 transition-all">
-                        <i class='bx bx-box text-xl'></i> Manage Products
+                        <i class='bx bx-box text-base'></i> Manage Products
                     </a>
                     <a href="#" data-view="categories"
                         class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 font-semibold hover:bg-slate-50 transition-all">
-                        <i class='bx bx-category-alt text-xl'></i> Categories
+                        <i class='bx bx-category-alt text-base'></i> Categories
+                    </a>
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6 ml-2 block">
+                        Website</p>
+                    <a href="#" data-view="homepage"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 font-semibold hover:bg-slate-50 transition-all">
+                        <i class='bx bx-layout text-base'></i> Edit Homepage
+                    </a>
+                    <a href="#" data-view="contact"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 font-semibold hover:bg-slate-50 transition-all">
+                        <i class='bx bx-envelope text-base'></i> Contact Info
+                    </a>
+                    <a href="#" data-view="theme"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 font-semibold hover:bg-slate-50 transition-all">
+                        <i class='bx bx-palette text-base'></i> Theme Settings
                     </a>
                 </nav>
             </div>
@@ -144,7 +185,7 @@
             <div class="p-4 border-t border-slate-100">
                 <button id="logout-btn"
                     class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-slate-500 font-bold hover:bg-red-50 hover:text-red-500 transition-colors">
-                    <i class='bx bx-log-out text-lg'></i> Sign Out
+                    <i class='bx bx-log-out text-sm'></i> Sign Out
                 </button>
             </div>
         </aside>
@@ -197,15 +238,15 @@
                         </div>
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mt-6">
-                        <h3 class="font-bold text-lg mb-4">Quick Actions</h3>
+                        <h3 class="font-bold text-sm mb-4">Quick Actions</h3>
                         <div class="flex flex-wrap gap-4">
                             <button
                                 onclick="document.querySelector('[data-view=products]').click(); setTimeout(()=>openProductModal('add'), 100);"
-                                class="px-6 py-3 bg-brand-light text-brand-accent hover:bg-brand-accent hover:text-white rounded-xl font-bold transition-all flex items-center gap-2">
+                                class="px-4 py-2 bg-brand-light text-brand-accent hover:bg-brand-accent hover:text-slate-900 rounded-xl font-bold transition-all flex items-center gap-2">
                                 <i class='bx bx-plus-circle'></i> Add New Product
                             </button>
                             <button onclick="seedMissingProducts()"
-                                class="px-6 py-3 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl font-bold transition-all flex items-center gap-2">
+                                class="px-4 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl font-bold transition-all flex items-center gap-2">
                                 <i class='bx bx-import'></i> Import Website Products
                             </button>
                         </div>
@@ -219,7 +260,7 @@
                         <div
                             class="p-6 border-b border-slate-100 flex justify-between items-center bg-white sticky top-0 z-10">
                             <div>
-                                <h3 class="font-bold text-lg flex items-center gap-2">Product Catalog <span
+                                <h3 class="font-bold text-sm flex items-center gap-2">Product Catalog <span
                                         id="lbl-total-products"
                                         class="bg-brand-accent/10 text-brand-accent text-xs px-2 py-0.5 rounded font-black border border-brand-accent/20 shadow-sm leading-none">0</span>
                                 </h3>
@@ -227,7 +268,7 @@
                                     (Database items only).</p>
                             </div>
                             <button onclick="openProductModal('add')"
-                                class="bg-brand-accent hover:bg-[#6bc020] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-brand-accent/20 transition-all flex items-center gap-2">
+                                class="bg-brand-accent hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2">
                                 <i class='bx bx-plus'></i> Add Product
                             </button>
                         </div>
@@ -247,7 +288,7 @@
                                 <tbody id="products-table-body" class="divide-y divide-slate-50">
                                     <!-- Items injected here -->
                                     <tr>
-                                        <td colspan="6" class="py-12 text-center text-slate-400 font-medium">Loading
+                                        <td colspan="6" class="py-12 text-center text-slate-500 font-medium">Loading
                                             products data...</td>
                                     </tr>
                                 </tbody>
@@ -263,12 +304,12 @@
                         <div
                             class="p-6 border-b border-slate-100 flex justify-between items-center bg-white sticky top-0 z-10">
                             <div>
-                                <h3 class="font-bold text-lg">Categories</h3>
+                                <h3 class="font-bold text-sm">Categories</h3>
                                 <p class="text-slate-500 text-xs mt-1">Control rendering order, subcategories, and
                                     structure.</p>
                             </div>
                             <button onclick="openCategoryModal('add')"
-                                class="bg-brand-accent hover:bg-[#6bc020] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-brand-accent/20 transition-all flex items-center gap-2">
+                                class="bg-brand-accent hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2">
                                 <i class='bx bx-plus'></i> New Category
                             </button>
                         </div>
@@ -286,12 +327,95 @@
                                 <tbody id="categories-table-body" class="divide-y divide-slate-50">
                                     <!-- Items injected here -->
                                     <tr>
-                                        <td colspan="4" class="py-12 text-center text-slate-400 font-medium">Loading
+                                        <td colspan="4" class="py-12 text-center text-slate-500 font-medium">Loading
                                             categories data...</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: HOMEPAGE -->
+                <div id="view-homepage" class="view-section hidden animate-fade-in">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                        <div class="flex items-center gap-4 border-b border-slate-100 pb-6 mb-6">
+                            <i class='bx bx-layout text-4xl text-brand-accent'></i>
+                            <div>
+                                <h2 class="text-xl font-black text-slate-800">Homepage Content Editor</h2>
+                                <p class="text-sm text-slate-500">Update main headings and texts safely.</p>
+                            </div>
+                        </div>
+                        <form id="form-homepage" class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Hero
+                                    Main Title (Large Text)</label>
+                                <input id="site-hero-title" type="text"
+                                    class="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
+                                    placeholder="e.g. Visual Masterpieces.">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Hero
+                                    Subtitle</label>
+                                <textarea id="site-hero-subtitle" rows="3"
+                                    class="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"></textarea>
+                            </div>
+                            <div class="flex justify-end pt-4 border-t border-slate-100">
+                                <button type="submit"
+                                    class="bg-brand-accent hover:bg-emerald-600 text-white px-6 py-2.5 rounded-full font-bold shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2">
+                                    <i class='bx bx-save'></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- VIEW: CONTACT -->
+                <div id="view-contact" class="view-section hidden animate-fade-in">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                        <div class="flex items-center gap-4 border-b border-slate-100 pb-6 mb-6">
+                            <i class='bx bxl-whatsapp text-4xl text-brand-accent'></i>
+                            <div>
+                                <h2 class="text-xl font-black text-slate-800">Contact & Social Setup</h2>
+                                <p class="text-sm text-slate-500">Update your WhatsApp numbers and email.</p>
+                            </div>
+                        </div>
+                        <form id="form-contact" class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Main
+                                    WhatsApp Number</label>
+                                <input id="site-wa-number" type="text"
+                                    class="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
+                                    placeholder="e.g. 94787354843">
+                                <p class="text-[10px] text-slate-400 mt-1">Include country code without '+' sign.</p>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email
+                                    Address</label>
+                                <input id="site-email" type="email"
+                                    class="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all"
+                                    placeholder="hello@example.com">
+                            </div>
+                            <div class="flex justify-end pt-4 border-t border-slate-100">
+                                <button type="submit"
+                                    class="bg-brand-accent hover:bg-emerald-600 text-white px-6 py-2.5 rounded-full font-bold shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2">
+                                    <i class='bx bx-save'></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- VIEW: THEME -->
+                <div id="view-theme" class="view-section hidden animate-fade-in">
+                    <div
+                        class="bg-white p-12 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center text-center h-[300px]">
+                        <i class='bx bx-check-circle text-6xl text-brand-accent mb-4'></i>
+                        <h2 class="text-2xl font-black text-slate-800">Theme Configurations Updated</h2>
+                        <p class="text-slate-500 mt-2 max-w-md">Your site design has already been permanently upgraded
+                            to the premium Deep Red / Slate dark theme. Further customizations require manual styling.
+                        </p>
                     </div>
                 </div>
 
@@ -304,15 +428,16 @@
 
     <!-- Modal: Add / Edit Product -->
     <div id="modal-product"
-        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[70] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        class="fixed inset-0 bg-white/40 backdrop-blur-sm z-[70] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div id="modal-product-content"
             class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col transform scale-95 transition-transform duration-300">
             <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h3 id="modal-product-title" class="text-xl font-black italic font-['Playfair_Display'] text-slate-800">
+                <h3 id="modal-product-title"
+                    class="text-base font-black italic font-['Playfair_Display'] text-slate-800">
                     Add New Product</h3>
                 <button onclick="closeModal('modal-product')"
                     class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors text-slate-600">
-                    <i class='bx bx-x text-xl'></i>
+                    <i class='bx bx-x text-base'></i>
                 </button>
             </div>
             <div class="p-8 overflow-y-auto custom-scrollbar flex-grow">
@@ -328,14 +453,14 @@
                                     class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Product
                                     Title</label>
                                 <input type="text" id="p-title" required
-                                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300">
+                                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-600">
                             </div>
                             <div>
                                 <label
                                     class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Product
                                     Code (SKU)</label>
                                 <input type="text" id="p-code" required
-                                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all uppercase placeholder:text-slate-300">
+                                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all uppercase placeholder:text-slate-600">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
@@ -358,7 +483,7 @@
                                     class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Envelope
                                     Price (Optional)</label>
                                 <input type="number" id="p-env-price"
-                                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-600"
                                     placeholder="e.g. 45">
                             </div>
                         </div>
@@ -391,7 +516,7 @@
                                         class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tag
                                         / Size Badge</label>
                                     <input type="text" id="p-tag" required
-                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-600"
                                         placeholder="e.g. A6 Size, Box">
                                 </div>
                                 <div class="flex items-end pb-1">
@@ -407,7 +532,7 @@
                                         </div>
                                         <div>
                                             <span class="block text-sm font-bold text-slate-800">Featured</span>
-                                            <span class="block text-[10px] text-slate-400 leading-none mt-0.5">Show on
+                                            <span class="block text-[10px] text-slate-500 leading-none mt-0.5">Show on
                                                 Homepage</span>
                                         </div>
                                     </label>
@@ -438,13 +563,31 @@
                                     <img id="p-image-preview" src="" class="w-full h-full object-cover">
                                     <div
                                         class="absolute inset-0 bg-red-500/80 hidden opacity-0 group-hover/img:opacity-100 group-hover/img:flex items-center justify-center transition-all">
-                                        <div class="text-center text-white">
+                                        <div class="text-center text-slate-900">
                                             <i class='bx bx-trash text-3xl'></i>
                                             <p class="text-xs font-bold mt-1">Replace Image</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Description & Extra Info -->
+                    <div class="space-y-4 pt-4 border-t border-slate-100">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Product
+                                Description</label>
+                            <textarea id="p-desc" rows="3"
+                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-400"
+                                placeholder="Enter full product description..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Extra
+                                Details (Materials, Weight, etc.)</label>
+                            <textarea id="p-extra" rows="2"
+                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-400"
+                                placeholder="Printed on premium 300GSM matte finish card..."></textarea>
                         </div>
                     </div>
 
@@ -460,9 +603,9 @@
 
                     <div class="pt-6 border-t border-slate-100 flex justify-end gap-3 mt-4">
                         <button type="button" onclick="closeModal('modal-product')"
-                            class="px-6 py-3 text-slate-600 font-bold hover:bg-slate-100 rounded-xl transition-colors">Cancel</button>
+                            class="px-4 py-2 text-slate-600 font-bold hover:bg-slate-100 rounded-xl transition-colors">Cancel</button>
                         <button type="submit" id="btn-save-product"
-                            class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-lg flex items-center gap-2">
+                            class="bg-brand-accent hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-lg shadow-emerald-500/20 flex items-center gap-2">
                             <span id="text-save-product">Save Product</span>
                             <div id="spinner-save-product" class="loader hidden"
                                 style="width: 16px; height: 16px; border-width: 2px; border-top-color: white;"></div>
@@ -475,15 +618,15 @@
 
     <!-- Modal: Category Management -->
     <div id="modal-category"
-        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[70] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        class="fixed inset-0 bg-white/40 backdrop-blur-sm z-[70] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div id="modal-category-content"
             class="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col transform scale-95 transition-transform duration-300">
             <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                 <h3 id="modal-category-title"
-                    class="text-xl font-black italic font-['Playfair_Display'] text-slate-800">Category details</h3>
+                    class="text-base font-black italic font-['Playfair_Display'] text-slate-800">Category details</h3>
                 <button onclick="closeModal('modal-category')"
                     class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors text-slate-600">
-                    <i class='bx bx-x text-xl'></i>
+                    <i class='bx bx-x text-base'></i>
                 </button>
             </div>
             <div class="p-8">
@@ -495,16 +638,16 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Category ID
                             / Key</label>
                         <input type="text" id="c-id" required
-                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-600"
                             placeholder="e.g. social_media">
-                        <p class="text-[10px] text-slate-400 mt-1" id="c-id-warning">Unique identifier. Modifying this
+                        <p class="text-[10px] text-slate-500 mt-1" id="c-id-warning">Unique identifier. Modifying this
                             changes the DB id.</p>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Display
                             Name</label>
                         <input type="text" id="c-name" required
-                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-600"
                             placeholder="e.g. Social Media Posts">
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -519,7 +662,7 @@
                         <label
                             class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Subcategories</label>
                         <input type="text" id="c-subs"
-                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-accent/50 focus:bg-white outline-none transition-all placeholder:text-slate-600"
                             placeholder="e.g. A4, A5, B6 (comma separated)">
                     </div>
 
@@ -527,9 +670,9 @@
 
                     <div class="pt-6 border-t border-slate-100 flex justify-end gap-3 mt-6">
                         <button type="button" onclick="closeModal('modal-category')"
-                            class="px-6 py-3 text-slate-600 font-bold hover:bg-slate-100 rounded-xl transition-colors">Cancel</button>
+                            class="px-4 py-2 text-slate-600 font-bold hover:bg-slate-100 rounded-xl transition-colors">Cancel</button>
                         <button type="submit" id="btn-save-category"
-                            class="bg-brand-accent hover:bg-[#6bc020] text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-lg flex items-center gap-2">
+                            class="bg-brand-accent hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-lg shadow-emerald-500/20 flex items-center gap-2">
                             <span id="text-save-category">Save Changes</span>
                             <div id="spinner-save-category" class="loader hidden"
                                 style="width: 16px; height: 16px; border-width: 2px; border-top-color: white;"></div>

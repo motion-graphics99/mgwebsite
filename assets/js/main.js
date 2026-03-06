@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     // Page Transition Fade In
     requestAnimationFrame(() => {
         document.body.classList.add('loaded');
@@ -24,16 +24,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Navbar Scroll Effect
     const nav = document.getElementById('main-nav');
     if (nav) {
+        let lastScrollTime = 0;
         const handleScroll = () => {
-            if (window.scrollY > 10) {
-                nav.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-md', 'py-2');
-                nav.classList.remove('bg-transparent', 'py-4');
+            const now = Date.now();
+            if (now - lastScrollTime < 100) return; // Throttle 100ms
+            lastScrollTime = now;
+
+            if (window.scrollY > 20) {
+                if (!nav.classList.contains('bg-white/95')) {
+                    nav.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-sm', 'border-b', 'border-slate-100', 'py-2');
+                    nav.classList.remove('bg-transparent', 'py-4', 'border-transparent');
+                }
             } else {
-                nav.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-md', 'py-2');
-                nav.classList.add('bg-transparent', 'py-4');
+                if (nav.classList.contains('bg-white/95')) {
+                    nav.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-sm', 'border-b', 'border-slate-100', 'py-2');
+                    nav.classList.add('bg-transparent', 'py-4', 'border-transparent');
+                }
             }
         };
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         handleScroll(); // Init on load
     }
 
@@ -42,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileBtn) {
         mobileBtn.addEventListener('click', function () {
             var menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+            if (menu) menu.classList.toggle('hidden');
         });
     }
 
@@ -96,26 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 300);
             }
         }
-
-        // Next/Prev Slider Buttons
-        const nextBtn = e.target.closest('.slide-next');
-        const prevBtn = e.target.closest('.slide-prev');
-
-        if (nextBtn) {
-            const wrapper = nextBtn.closest('.group\\/slider');
-            if (wrapper) {
-                const slider = wrapper.querySelector('.custom-scrollbar');
-                if (slider) slider.scrollBy({ left: 250, behavior: 'smooth' });
-            }
-        }
-
-        if (prevBtn) {
-            const wrapper = prevBtn.closest('.group\\/slider');
-            if (wrapper) {
-                const slider = wrapper.querySelector('.custom-scrollbar');
-                if (slider) slider.scrollBy({ left: -250, behavior: 'smooth' });
-            }
-        }
     });
 
     document.addEventListener('keydown', (e) => {
@@ -132,167 +121,171 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Dynamic WhatsApp Ordering Message Generation
-    document.querySelectorAll('a[title="Buy Now"], a[title="Add Order"]').forEach(btn => {
-        btn.addEventListener('click', function (e) {
+    document.addEventListener('click', function (e) {
+        const buyBtn = e.target.closest('a[title="Buy Now"], a[title="Add Order"]');
+        if (buyBtn) {
             e.preventDefault();
-            const item = this.closest('.portfolio-item, .card-hover');
+            const item = buyBtn.closest('.portfolio-item, .card-hover, .snap-start');
             let code = "Unknown", title = "Unknown", price = "Unknown";
 
             if (item) {
-                const idEl = item.querySelector('.text-slate-400.mb-1, .text-slate-400.mb-2, .text-\\[10px\\]');
+                const idEl = item.querySelector('.text-slate-400');
                 if (idEl) code = idEl.innerText.trim();
 
                 const titleEl = item.querySelector('h4');
                 if (titleEl) title = titleEl.innerText.trim();
 
-                const priceEl = item.querySelector('.text-brand-accent.font-black, .text-brand-accent.font-bold');
+                const priceEl = item.querySelector('.text-emerald-500.font-black');
                 if (priceEl) price = priceEl.innerText.trim();
             }
 
             const message = `Hello Motion Graphic Studio! 👋%0AI would like to place an order:%0A%0A*Product:* ${title}%0A*Code:* ${code}%0A*Price:* ${price}%0A%0APlease let me know the next steps.`;
-            const phone = "94787354843"; // Main WA number
+            const phone = window.globalWANumber || "94787354843";
             window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-        });
+        }
     });
-
-
 });
 
+// Filtering and Search System
 function setupProductsFilter(initialFilter) {
-    const mainButtons = document.querySelectorAll('.filter-btn');
     const emptyState = document.getElementById('empty-state');
-    const subFiltersContainer = document.getElementById('dynamic-sub-filters') || document.getElementById('wedding-sub-filters');
+    const pillFilters = document.getElementById('pill-filters');
+    const productCountEl = document.getElementById('product-count');
+    const searchInput = document.getElementById('sidebar-search');
+    const portfolioGrid = document.getElementById('portfolio-grid');
 
-    let currentMainFilter = 'all';
+    let currentMainFilter = initialFilter || 'all';
     let currentSubFilter = 'all';
 
-    function renderSubFilters(catId) {
-        if (!subFiltersContainer || !window.appCategories) return;
+    function filterProducts() {
+        const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        const items = document.querySelectorAll('.portfolio-item');
+        let visibleCount = 0;
 
-        const category = window.appCategories.find(c => c.id === catId);
-        if (!category || !category.subcategories || category.subcategories.length === 0) {
-            subFiltersContainer.innerHTML = '';
-            subFiltersContainer.classList.add('hidden');
-            subFiltersContainer.classList.remove('flex');
-            return;
-        }
-
-        subFiltersContainer.classList.remove('hidden');
-        subFiltersContainer.classList.add('flex');
-
-        let html = `<button data-sub-filter="all" class="sub-filter-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all border border-slate-200 text-slate-600 hover:border-brand-accent hover:text-brand-accent active">All Items</button>`;
-
-        category.subcategories.forEach(sub => {
-            const slug = sub.toLowerCase().replace(/\s+/g, '-');
-            html += `<button data-sub-filter="${slug}" class="sub-filter-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all border border-slate-200 text-slate-600 hover:border-brand-accent hover:text-brand-accent">${sub}</button>`;
-        });
-
-        subFiltersContainer.innerHTML = html;
-
-        // Reattach sub-listeners
-        const subButtons = document.querySelectorAll('.sub-filter-btn');
-        subButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentSubFilter = btn.getAttribute('data-sub-filter');
-                updateSubBtnStyles();
-                applyFilters();
-            });
-        });
-    }
-
-    function applyFilters() {
-        let foundAny = false;
-        const currentItems = document.querySelectorAll('.portfolio-item');
-
-        const itemsToHide = [];
-        const itemsToShow = [];
-
-        currentItems.forEach(item => {
-            if (!item.style.transition) {
-                item.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-            }
-
+        items.forEach(item => {
             const itemCat = item.getAttribute('data-category');
-            const itemSize = item.getAttribute('data-size');
+            const itemSize = (item.getAttribute('data-size') || '').toLowerCase(); // Matches tag slugs like 'a4'
+            const itemTitle = item.querySelector('h4').textContent.toLowerCase();
+            const itemCode = item.querySelector('.text-slate-400').textContent.toLowerCase();
 
-            let mainMatch = (currentMainFilter === 'all' || itemCat === currentMainFilter);
-            let subMatch = true;
+            const matchesCategory = currentMainFilter === 'all' || itemCat === currentMainFilter;
+            const matchesSub = currentSubFilter === 'all' || itemSize === currentSubFilter;
+            const matchesSearch = query === '' || itemTitle.includes(query) || itemCode.includes(query);
 
-            if (currentMainFilter !== 'all' && currentSubFilter !== 'all') {
-                subMatch = (itemSize === currentSubFilter);
-            }
-
-            if (mainMatch && subMatch) {
-                itemsToShow.push(item);
-                foundAny = true;
+            if (matchesCategory && matchesSub && matchesSearch) {
+                item.style.display = 'flex';
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'scale(1)';
+                }, 10);
+                visibleCount++;
             } else {
-                itemsToHide.push(item);
+                item.style.opacity = '0';
+                item.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    if (item.style.opacity === '0') item.style.display = 'none';
+                }, 300);
             }
         });
 
-        // Batch visual updates to prevent layout thrashing
-        itemsToHide.forEach(item => {
-            item.style.opacity = '0';
-            item.style.transform = 'scale(0.9) translateY(10px)';
-        });
-
-        itemsToShow.forEach(item => {
-            item.style.display = 'flex';
-        });
-
-        // Use requestAnimationFrame for smoother paint cycle transition
-        requestAnimationFrame(() => {
-            itemsToShow.forEach(item => {
-                item.style.opacity = '1';
-                item.style.transform = 'scale(1) translateY(0)';
-            });
-        });
-
-        setTimeout(() => {
-            itemsToHide.forEach(item => {
-                if (item.style.opacity === '0') {
-                    item.style.display = 'none';
-                }
-            });
-        }, 400);
-
-        if (foundAny) emptyState.classList.add('hidden');
-        else emptyState.classList.remove('hidden');
-    }
-
-    function updateMainBtnStyles() {
-        mainButtons.forEach(b => b.classList.remove('active'));
-        const activeBtn = Array.from(mainButtons).find(b => b.getAttribute('data-filter') === currentMainFilter);
-        if (activeBtn) activeBtn.classList.add('active');
-    }
-
-    function updateSubBtnStyles() {
-        const subButtons = document.querySelectorAll('.sub-filter-btn');
-        subButtons.forEach(b => b.classList.remove('active', 'bg-brand-accent', 'text-white', 'border-brand-accent'));
-        subButtons.forEach(b => b.classList.add('text-slate-600', 'border-slate-200'));
-
-        const activeBtn = Array.from(subButtons).find(b => b.getAttribute('data-sub-filter') === currentSubFilter);
-        if (activeBtn) {
-            activeBtn.classList.remove('text-slate-600', 'border-slate-200');
-            activeBtn.classList.add('active', 'bg-brand-accent', 'text-white', 'border-brand-accent');
+        if (productCountEl) productCountEl.innerText = visibleCount;
+        if (emptyState) {
+            if (visibleCount > 0) emptyState.classList.add('hidden');
+            else emptyState.classList.remove('hidden');
         }
     }
 
-    mainButtons.forEach(btn => {
+    function updatePills(categoryId) {
+        if (!pillFilters) return;
+
+        // Reset subfilter when category changes
+        currentSubFilter = 'all';
+
+        // Find the category object to get its subcategories
+        const category = (window.appCategories || []).find(c => c.id === categoryId);
+
+        let pillsHtml = `<button data-filter="all" class="filter-pill active">All Designs</button>`;
+
+        if (category && category.subcategories && category.subcategories.length > 0) {
+            category.subcategories.forEach(sub => {
+                const slug = sub.toLowerCase().replace(/\s+/g, '-');
+                pillsHtml += `<button data-filter="${slug}" class="filter-pill">${sub}</button>`;
+            });
+        }
+
+        pillFilters.innerHTML = pillsHtml;
+    }
+
+    // Sidebar Category Clicks
+    const sidebar = document.getElementById('sidebar-categories');
+    if (sidebar) {
+        sidebar.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (btn) {
+                currentMainFilter = btn.getAttribute('data-filter');
+
+                // Style updates
+                document.querySelectorAll('.sidebar-cat-btn').forEach(b => b.classList.remove('active-cat'));
+                btn.classList.add('active-cat');
+
+                updatePills(currentMainFilter);
+                filterProducts();
+            }
+        });
+    }
+
+    // Pill Filter Clicks
+    if (pillFilters) {
+        pillFilters.addEventListener('click', (e) => {
+            const pill = e.target.closest('.filter-pill');
+            if (pill) {
+                currentSubFilter = pill.getAttribute('data-filter');
+
+                document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+
+                filterProducts();
+            }
+        });
+    }
+
+    // View Toggle Clicks
+    document.querySelectorAll('.view-toggle-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            currentMainFilter = btn.getAttribute('data-filter');
-            currentSubFilter = 'all';
-            updateMainBtnStyles();
-            renderSubFilters(currentMainFilter);
-            applyFilters();
+            document.querySelectorAll('.view-toggle-btn').forEach(b => {
+                b.classList.remove('active', 'bg-emerald-500', 'text-white');
+                b.classList.add('text-slate-400');
+            });
+            btn.classList.add('active', 'bg-emerald-500', 'text-white');
+            btn.classList.remove('text-slate-400');
+
+            if (portfolioGrid) {
+                if (btn.getAttribute('data-view') === 'list') {
+                    portfolioGrid.classList.remove('grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4');
+                    portfolioGrid.classList.add('grid-cols-1', 'gap-4');
+                    portfolioGrid.classList.add('list-view');
+                } else {
+                    portfolioGrid.classList.remove('grid-cols-1', 'gap-4', 'list-view');
+                    portfolioGrid.classList.add('grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4', 'gap-6');
+                }
+            }
         });
     });
 
-    if (initialFilter) {
-        currentMainFilter = initialFilter;
+    // Sidebar Search input
+    if (searchInput) {
+        searchInput.addEventListener('input', filterProducts);
     }
 
-    updateMainBtnStyles();
-    renderSubFilters(currentMainFilter);
-    applyFilters();
+    // Initialization
+    if (currentMainFilter !== 'all') {
+        const targetBtn = Array.from(document.querySelectorAll('.sidebar-cat-btn')).find(b => b.getAttribute('data-filter') === currentMainFilter);
+        if (targetBtn) {
+            document.querySelectorAll('.sidebar-cat-btn').forEach(b => b.classList.remove('active-cat'));
+            targetBtn.classList.add('active-cat');
+        }
+        updatePills(currentMainFilter);
+    }
+
+    setTimeout(filterProducts, 600);
 }

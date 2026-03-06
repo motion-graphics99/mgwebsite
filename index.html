@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -13,6 +13,11 @@
     <!-- Boxicons for modern icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
+    <!-- Performance Optimization -->
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
 
@@ -23,7 +28,7 @@
                 extend: {
                     colors: {
                         brand: {
-                            accent: '#7dd329',
+                            accent: '#10b981',
                             dark: '#0f172a',
                         }
                     }
@@ -33,319 +38,336 @@
     </script>
 </head>
 
-<body
-    class="bg-gradient-to-br from-blue-50/50 via-slate-50 to-indigo-100/40 flex flex-col min-h-screen relative overflow-x-hidden">
-    <!-- Soft Background Overlay -->
-    <div class="fixed inset-0 bg-soft-gradient -z-10 w-full h-full pointer-events-none"></div>
+<body class="bg-white flex flex-col min-h-screen relative overflow-x-hidden font-sans">
 
-    <!-- Navigation -->
-    <nav id="main-nav"
-        class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent py-4 text-slate-900 border-b border-transparent">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="index.html" class="flex items-center gap-3">
-                        <img src="assets/img/logo.png" alt="Motion Graphics Studio" class="h-12 object-contain">
-                        <div class="flex flex-col">
-                            <span
-                                class="font-['Playfair_Display'] font-black italic text-[22px] leading-none tracking-wide text-slate-900">MOTION</span>
-                            <span
-                                class="font-sans text-[10px] text-brand-accent font-bold tracking-[0.3em] uppercase mt-[4px]">Graphics</span>
-                        </div>
-                    </a>
-                </div>
+    <!-- Hero / Top Section -->
+    <div class="relative bg-white w-full min-h-[90vh] flex flex-col pt-20 pb-24">
+        <!-- Background Image Overlay - Mist Style -->
+        <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            <img src="assets/img/hero-new.jpg" alt="Hero Background"
+                class="absolute inset-0 w-full h-full object-cover">
+            <!-- Glassy White Fade from bottom and left -->
+            <div class="absolute inset-0 bg-gradient-to-r from-white/95 via-white/40 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent"></div>
+        </div>
 
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-10 items-center h-full">
-
-                    <!-- Inline Search Component -->
-                    <div class="search-container relative flex items-center group/search mr-0">
-                        <div
-                            class="flex items-center bg-slate-100/80 rounded-full px-4 py-2 border border-slate-200 focus-within:border-brand-accent focus-within:bg-white focus-within:ring-2 focus-within:ring-brand-accent/30 transition-all w-48 lg:w-64">
-                            <i class='bx bx-search text-slate-400 text-lg mr-2'></i>
-                            <input type="text" autocomplete="off" placeholder="Search products..."
-                                class="inline-search-input w-full bg-transparent border-none outline-none text-sm font-medium text-slate-700 placeholder:text-slate-400">
-                        </div>
-
-                        <!-- Search Dropdown -->
-                        <div
-                            class="inline-search-dropdown absolute top-full left-0 right-0 mt-3 bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-slate-100 hidden flex-col overflow-hidden w-[350px] lg:w-[400px] z-[80]">
-                            <div class="inline-search-results max-h-[60vh] overflow-y-auto custom-scrollbar p-2">
-                                <!-- Results injected here -->
+        <!-- Navigation -->
+        <nav id="main-nav"
+            class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent py-4 text-slate-900 border-transparent">
+            <div class="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20">
+                <div class="flex justify-between items-center h-14">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="index.html" class="flex items-center gap-3 group relative z-[60]">
+                            <img src="assets/img/logo.png" alt="Logo"
+                                class="h-10 md:h-20 w-auto transition-transform group-hover:scale-105 drop-shadow-md">
+                            <div class="flex flex-col">
+                                <span
+                                    class="font-['Playfair_Display'] italic font-black text-[18px] md:text-[28px] text-slate-900 leading-none tracking-tighter">MOTION</span>
+                                <span
+                                    class="text-[8px] md:text-[10px] font-bold text-slate-400 tracking-[0.4em] uppercase leading-none mt-1">Graphics
+                                    Studio</span>
                             </div>
+                        </a>
+                    </div>
+
+                    <!-- Desktop Menu -->
+                    <div class="hidden lg:flex space-x-10 items-center h-full z-10">
+                        <a href="index.html"
+                            class="text-emerald-500 font-black text-[11px] tracking-[0.2em] uppercase relative py-1">
+                            Home
+                            <span class="absolute bottom-0 left-0 w-full h-[1.5px] bg-emerald-500 rounded-full"></span>
+                        </a>
+
+                        <!-- Designs Dropdown -->
+                        <div class="nav-item group relative h-full flex items-center cursor-pointer">
+                            <a href="products.html"
+                                class="text-slate-900 font-black text-[11px] tracking-[0.2em] hover:text-emerald-500 transition-all flex items-center gap-1 uppercase">
+                                Designs <i class='bx bx-chevron-down text-base opacity-50'></i>
+                            </a>
                             <div
-                                class="search-result-count bg-slate-50 px-3 py-2 border-t border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center">
-                                Type to search...
+                                class="dropdown-menu absolute top-full mt-0 left-0 w-64 bg-white rounded-2xl shadow-2xl border border-slate-50 flex flex-col p-3 z-[60] backdrop-blur-xl">
+                                <!-- Dynamically loaded from fetch-products.js -->
+                                <div class="px-4 py-8 text-center">
+                                    <i class='bx bx-loader-alt bx-spin text-emerald-200 text-xl'></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <a href="index.html"
-                        class="text-brand-accent font-medium pb-1 border-b-2 border-brand-accent h-full flex items-center">Home</a>
+                        <a href="contact.html"
+                            class="text-slate-900 font-black text-[11px] tracking-[0.2em] hover:text-emerald-500 transition-all uppercase">Contact</a>
 
-                    <!-- Dropdown Nav -->
-                    <div class="nav-item group relative h-full flex items-center cursor-pointer">
                         <a href="products.html"
-                            class="text-slate-600 hover:text-brand-accent transition-colors flex items-center gap-1 font-medium">
-                            Products <i class='bx bx-chevron-down text-lg'></i>
+                            class="bg-transparent text-slate-900 border border-slate-900 hover:bg-slate-900 hover:text-white font-black py-2.5 px-8 rounded-full transition-all text-[10px] uppercase tracking-[0.15em]">
+                            Shop Now
                         </a>
-                        <div
-                            class="dropdown-menu absolute top-full mt-0 left-0 w-56 bg-white rounded-xl shadow-xl border border-slate-100 flex flex-col p-2 z-[60]">
-                            <a href="products.html?filter=wedding"
-                                class="px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-accent rounded-lg transition-colors font-medium">Wedding
-                                Cards</a>
-                            <a href="products.html?filter=business"
-                                class="px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-accent rounded-lg transition-colors font-medium">Business
-                                Cards</a>
-                            <a href="products.html?filter=social"
-                                class="px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-accent rounded-lg transition-colors font-medium">Social
-                                Media</a>
-                            <a href="products.html?filter=packaging"
-                                class="px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-accent rounded-lg transition-colors font-medium">Packaging
-                                & Boxes</a>
-                        </div>
                     </div>
 
-                    <a href="contact.html"
-                        class="text-slate-600 hover:text-brand-accent transition-colors font-medium">Contact</a>
+                    <!-- Mobile Menu Button -->
+                    <div class="lg:hidden flex items-center gap-2 z-10">
+                        <button id="mobile-menu-btn" class="text-slate-900 focus:outline-none p-2">
+                            <i class='bx bx-menu text-2xl'></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Mobile Menu Panel -->
+            <div id="mobile-menu"
+                class="hidden bg-white border-b border-slate-100 absolute w-full left-0 z-40 shadow-lg mt-0 transform origin-top transition-transform duration-300">
+                <div class="px-6 py-8 space-y-6 text-center">
+                    <a href="index.html"
+                        class="block text-emerald-500 font-black text-sm uppercase tracking-widest">Home</a>
                     <a href="products.html"
-                        class="btn-primary px-6 py-2 rounded-full font-bold text-sm shadow-sm text-white border border-brand-accent hover:border-transparent">
-                        Shop Now
+                        class="block text-slate-900 hover:text-emerald-500 text-sm font-black uppercase tracking-widest">Designs</a>
+                    <a href="contact.html"
+                        class="block text-slate-900 hover:text-emerald-500 text-sm font-black uppercase tracking-widest">Contact</a>
+                    <a href="products.html"
+                        class="inline-block bg-slate-900 text-white font-black py-2.5 px-10 rounded-full text-xs uppercase tracking-widest">Shop
+                        Now</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Content -->
+        <div
+            class="relative z-10 flex-grow flex items-center max-w-7xl mx-auto w-full px-6 sm:px-12 lg:px-20 mt-10 md:mt-16">
+            <div class="max-w-3xl">
+                <!-- Badge -->
+                <div
+                    class="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm border border-emerald-100 px-3 py-1 rounded-full mb-6 animate-fade-in shadow-sm">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] leading-none">Accepting
+                        wedding orders</span>
+                </div>
+
+                <h1 id="dynamic-hero-title"
+                    class="text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.05] mb-6 tracking-tight font-elite">
+                    Pure <span class="text-emerald-500 italic">Excellence</span> <br>
+                    <span class="text-slate-400 font-normal">in every pixel.</span>
+                </h1>
+                <p id="dynamic-hero-subtitle"
+                    class="text-sm md:text-base text-slate-500 mb-10 max-w-xl font-medium leading-relaxed italic">
+                    Premium minimalist wedding invitations and high-end visual branding solutions for those who value
+                    sophistication.
+                </p>
+
+                <!-- Dual Actions Row -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="products.html"
+                        class="bg-slate-900 text-white font-bold py-2.5 px-6 rounded-full hover:bg-black transition-all shadow-xl hover:-translate-y-0.5 flex items-center gap-2 group text-[11px] tracking-widest">
+                        EXPLORE COLLECTION <i
+                            class='bx bx-right-arrow-alt text-lg group-hover:translate-x-1 transition-transform'></i>
+                    </a>
+                    <a href="contact.html"
+                        class="bg-white/80 backdrop-blur text-slate-800 font-bold py-2.5 px-6 rounded-full border border-slate-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 text-[11px] tracking-widest">
+                        CONTACT US
                     </a>
                 </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden flex items-center gap-2">
-                    <button onclick="openSearchModal()"
-                        class="text-slate-800 focus:outline-none p-2 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50">
-                        <i class='bx bx-search text-2xl'></i>
-                    </button>
-                    <button id="mobile-menu-btn" class="text-slate-800 focus:outline-none p-2">
-                        <i class='bx bx-menu text-3xl'></i>
-                    </button>
-                </div>
             </div>
         </div>
+    </div>
 
-        <!-- Mobile Menu Panel -->
-        <div id="mobile-menu"
-            class="hidden md:hidden bg-white border-b border-slate-100 absolute w-full left-0 z-40 shadow-lg mt-2">
-            <div class="px-4 py-6 space-y-4 text-center">
-                <a href="index.html" class="block text-brand-accent font-medium text-lg">Home</a>
-                <div class="text-center">
-                    <a href="products.html"
-                        class="block text-slate-600 hover:text-brand-accent text-lg transition-colors mb-2 font-medium">Products</a>
-                    <div class="flex flex-col bg-slate-50 py-2 rounded-lg border border-slate-100">
-                        <a href="products.html?filter=wedding"
-                            class="py-2 text-slate-500 hover:text-brand-accent text-sm">Wedding Cards</a>
-                        <a href="products.html?filter=business"
-                            class="py-2 text-slate-500 hover:text-brand-accent text-sm">Business Cards</a>
-                        <a href="products.html?filter=social"
-                            class="py-2 text-slate-500 hover:text-brand-accent text-sm">Social Media</a>
-                        <a href="products.html?filter=packaging"
-                            class="py-2 text-slate-500 hover:text-brand-accent text-sm">Cake Boxes</a>
-                    </div>
-                </div>
-                <a href="contact.html"
-                    class="block text-slate-600 hover:text-brand-accent text-lg transition-colors font-medium">Contact</a>
-            </div>
-        </div>
-    </nav>
+    <!-- Floating Search / Filter Bar -->
+    <div class="relative z-30 max-w-5xl mx-auto px-6 sm:px-12 w-full -mt-10 mb-16 pointer-events-auto">
+        <div
+            class="bg-white rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.04)] p-2.5 md:p-3 flex flex-col md:flex-row items-center gap-3 border border-slate-50">
 
-    <!-- Hero Section -->
-    <section class="pt-32 pb-24 relative overflow-hidden flex-grow">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <!-- Text Content -->
-                <div class="text-center lg:text-left z-10 pt-10">
-                    <div
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-sm font-medium text-slate-600 mb-8 shadow-sm">
-                        <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
-                        Premium Graphic Designs
-                    </div>
-                    <h1
-                        class="font-['Playfair_Display'] text-5xl md:text-6xl lg:text-7xl font-black italic tracking-tight mb-6 leading-tight text-slate-900">
-                        Visual <br>
-                        <span
-                            class="text-brand-accent not-italic font-sans font-black tracking-normal">Masterpieces.</span>
-                    </h1>
-                    <p class="text-lg text-slate-500 mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed font-medium">
-                        Transforming concepts into stunning graphics. Specializing in premium Wedding Invitations,
-                        modern Business Identities, and Visual Branding.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <a href="products.html"
-                            class="btn-primary px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 shadow-lg z-20">
-                            Explore Collection <i class='bx bx-right-arrow-alt text-xl'></i>
-                        </a>
-                        <a href="contact.html"
-                            class="px-8 py-4 rounded-full bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-all flex items-center justify-center gap-2 text-sm shadow-sm z-20">
-                            Contact Us
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Hero Image Layout (Sleek Red-Forward Floating Style) -->
+            <!-- Real-time Search Container -->
+            <div class="relative flex-grow w-full search-container">
                 <div
-                    class="relative w-full aspect-square md:aspect-video lg:aspect-square flex items-center justify-center z-0 perspective-1000">
+                    class="flex items-center bg-slate-50/50 rounded-2xl px-4 py-3 transition-all focus-within:bg-white focus-within:shadow-sm border border-transparent focus-within:border-emerald-100">
+                    <i class='bx bx-search text-slate-300 text-lg mr-3'></i>
+                    <input type="text" placeholder="Search Design Title or Keywords"
+                        class="w-full bg-transparent outline-none text-slate-700 placeholder:text-slate-300 font-semibold text-sm inline-search-input">
+                </div>
 
-                    <!-- Floating Image Background 1 -->
-                    <div
-                        class="absolute left-0 bottom-10 w-2/5 md:w-[45%] z-10 transition-transform duration-700 hover:-translate-x-4 hover:scale-105 group/hero shadow-xl rounded-2xl transform object-contain rotate-[-5deg]">
-                        <img src="assets/img/hero-3.png" alt="Gold Element"
-                            class="w-full h-auto object-contain rounded-2xl opacity-90 border-4 border-white">
+                <!-- Suggestions Dropdown -->
+                <div
+                    class="inline-search-dropdown hidden absolute top-full left-0 w-full bg-white mt-2 rounded-2xl shadow-2xl border border-slate-100 z-[100] flex-col overflow-hidden animate-fade-in shadow-emerald-900/5">
+                    <div class="flex justify-between items-center px-4 py-2 bg-slate-50/50 border-b border-slate-50">
+                        <span
+                            class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] search-result-count">0
+                            Results Found</span>
+                        <div class="flex items-center gap-1 text-emerald-500">
+                            <span class="text-[9px] font-black uppercase tracking-widest">Live Search</span>
+                            <i class='bx bx-check-circle text-xs'></i>
+                        </div>
                     </div>
-
-                    <!-- Floating Image Background 2 -->
-                    <div
-                        class="absolute right-0 top-10 w-[45%] z-20 transition-transform duration-700 hover:translate-x-4 hover:scale-105 group/hero shadow-2xl rounded-2xl transform object-contain rotate-[5deg]">
-                        <img src="assets/img/hero-2.png" alt="Hero Add 2"
-                            class="w-full h-auto object-contain rounded-2xl opacity-95 border-4 border-white">
-                    </div>
-
-                    <!-- Floating OVERLAY (The Red Card) -->
-                    <div
-                        class="absolute right-[15%] bottom-[15%] w-[60%] sm:w-[50%] md:w-[55%] z-30 transition-transform duration-700 hover:-translate-y-6 hover:scale-110 group/hero shadow-2xl rounded-3xl transform object-contain">
-                        <img src="assets/img/hero-1.png" alt="Hero Invite 1"
-                            class="w-full h-auto object-contain drop-shadow-[0_30px_50px_rgba(0,0,0,0.3)] rounded-3xl border border-white">
-                        <div
-                            class="absolute -top-4 -right-4 bg-brand-accent text-white font-black text-xs px-3 py-1 rounded-full shadow-lg transform rotate-12">
-                            FEATURED</div>
-                    </div>
-
+                    <div class="inline-search-results max-h-[350px] overflow-y-auto p-2 no-scrollbar space-y-2"></div>
                 </div>
             </div>
+
+            <!-- Checkbox Collection Dropdown -->
+            <div
+                class="relative w-full md:w-[200px] group/coll border-t md:border-t-0 md:border-l border-slate-100 md:pl-3">
+                <div
+                    class="flex items-center justify-between px-3 py-3 cursor-pointer hover:bg-slate-50 rounded-xl transition-colors">
+                    <div class="flex items-center gap-2">
+                        <i class='bx bx-category-alt text-emerald-500 text-lg'></i>
+                        <span class="text-slate-600 font-bold text-[12px] truncate uppercase tracking-widest"
+                            id="selected-collections-label">All Designs</span>
+                    </div>
+                    <i class='bx bx-chevron-down text-slate-300 transition-transform group-hover/coll:rotate-180'></i>
+                </div>
+
+                <!-- Dropdown with Checkboxes -->
+                <div
+                    class="absolute top-full mt-2 left-0 w-full md:w-60 bg-white rounded-2xl shadow-2xl border border-slate-100 p-3 z-[90] opacity-0 invisible group-hover/coll:opacity-100 group-hover/coll:visible transition-all duration-200 shadow-emerald-900/5">
+                    <div class="flex justify-between items-center mb-2 px-1">
+                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Collections</span>
+                        <button id="clear-filters"
+                            class="text-[9px] font-black text-emerald-500 uppercase">Clear</button>
+                    </div>
+                    <div class="space-y-0.5 max-h-[300px] overflow-y-auto no-scrollbar" id="category-checkboxes">
+                        <!-- Dynamically loaded from fetch-products.js -->
+                        <div class="flex justify-center py-4">
+                            <i class='bx bx-loader-alt bx-spin text-emerald-100 text-xl'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button
+                onclick="window.location.href='products.html?q=' + document.querySelector('.inline-search-input').value"
+                class="w-full md:w-auto bg-slate-900 hover:bg-black text-white font-black py-3 px-8 rounded-2xl transition-all shadow-lg text-[11px] uppercase tracking-widest flex items-center justify-center">
+                SEARCH
+            </button>
         </div>
-    </section>
+    </div>
+
+    <!-- Main Content Container -->
+    <div id="dynamic-index-categories" class="w-full"></div>
 
     <!-- Featured Products container -->
-    <section class="py-24 bg-white/70 backdrop-blur-md border-t border-slate-100 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-            <div class="text-center mb-16">
-                <h2
-                    class="text-3xl md:text-5xl font-black mb-4 font-['Playfair_Display'] italic text-slate-900 tracking-wide">
-                    Featured Collections</h2>
-                <div class="w-16 h-1 bg-brand-accent mx-auto mb-6 rounded-full"></div>
-            </div>
+    <section class="py-24 bg-white relative z-10 overflow-hidden">
+        <!-- Soft Artistic Blurs -->
+        <div
+            class="absolute top-0 right-0 w-96 h-96 bg-emerald-50 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3">
+        </div>
+        <div class="absolute bottom-1/4 left-0 w-80 h-80 bg-slate-50 rounded-full blur-[100px] -translate-x-1/4">
+        </div>
 
-            <div id="dynamic-index-categories" class="w-full"></div>
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 pt-8 relative z-10">
+            <div class="text-center mb-16">
+                <span
+                    class="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.4em] mb-4 block animate-fade-in">Curated
+                    Selection</span>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 font-elite italic text-slate-800 tracking-tight">
+                    Premium <span class="text-emerald-500">Designs</span></h2>
+                <div class="w-10 h-0.5 bg-emerald-500/20 mx-auto mb-8"></div>
+                <p class="text-slate-400 max-w-md mx-auto text-[13px] font-medium leading-relaxed italic">
+                    "Every design tells a unique story. Find the one that speaks to yours."
+                </p>
+            </div>
 
             <div class="mt-16 text-center">
                 <a href="products.html"
-                    class="inline-flex items-center gap-2 px-8 py-4 border-2 border-slate-900 text-slate-900 rounded-full font-bold hover:bg-slate-900 hover:text-white transition-all shadow-sm">
-                    View All Designs <i class='bx bx-right-arrow-alt text-xl'></i>
+                    class="inline-flex items-center gap-2 px-6 py-2 border border-slate-200 text-slate-500 rounded-full font-bold text-xs hover:bg-slate-50 transition-all uppercase tracking-widest">
+                    View Portfolio <i class='bx bx-right-arrow-alt text-base'></i>
                 </a>
             </div>
         </div>
     </section>
 
-
-    <!-- Simple CTA -->
-    <section class="py-20 bg-slate-50 border-t border-slate-100">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <h2 class="font-['Playfair_Display'] text-3xl md:text-5xl font-bold mb-6 italic text-slate-900">Need a
-                Custom Design?</h2>
-            <p class="text-slate-500 mb-8 max-w-xl mx-auto text-lg">Let me curate something special and unique for your
-                brand or event.</p>
-            <a href="https://wa.me/94787354843" target="_blank"
-                class="inline-flex items-center gap-2 px-8 py-4 bg-[#25D366] text-white rounded-full font-bold hover:bg-[#128C7E] transition-all shadow-lg shadow-[#25D366]/20">
-                <i class='bx bxl-whatsapp text-2xl'></i> Send a Message
-            </a>
-        </div>
-    </section>
-
-    <!-- Comprehensive Dark Footer -->
-    <footer class="bg-slate-950 border-t border-slate-900 pt-16 pb-8 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Dark Blue Glassmorphism Footer -->
+    <footer class="bg-[#0f172a]/95 backdrop-blur-xl border-t border-white/5 pt-16 pb-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 relative">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                 <!-- Brand Info -->
                 <div class="flex flex-col items-center md:items-start text-center md:text-left">
-                    <a href="index.html" class="flex items-center gap-3 mb-4 group">
-                        <img src="assets/img/logo.png" alt="Logo"
-                            class="h-12 object-contain brightness-0 invert opacity-80 group-hover:opacity-100 transition-all">
+                    <a href="index.html"
+                        class="flex items-center gap-4 mb-4 group opacity-85 hover:opacity-100 transition-opacity">
+                        <img src="assets/img/logo.png" alt="Logo" class="h-12 brightness-0 invert opacity-70"
+                            loading="lazy">
                         <div class="flex flex-col text-left">
                             <span
-                                class="font-['Playfair_Display'] font-black italic text-[20px] text-white leading-none tracking-wide">MOTION</span>
+                                class="font-['Playfair_Display'] italic font-black text-[30px] text-slate-400 leading-none tracking-tight uppercase">MOTION</span>
                             <span
-                                class="font-sans text-[10px] text-brand-accent font-bold tracking-[0.2em] uppercase mt-[4px]">Graphics</span>
+                                class="text-[10px] text-slate-500 font-bold tracking-[0.4em] uppercase leading-none mt-1">Graphics
+                                Studio</span>
                         </div>
                     </a>
-                    <p class="text-slate-400 text-sm leading-relaxed max-w-xs">
-                        Crafting premium minimalist visual identities, invitations, and packaging.
+                    <p class="text-slate-400 text-xs leading-relaxed max-w-xs font-medium">
+                        Crafting premium minimalist visual identities, artistic invitations, and luxury packaging
+                        solutions.
                     </p>
                 </div>
 
                 <!-- Quick Links -->
                 <div class="flex flex-col items-center md:items-start">
-                    <h4 class="font-bold text-white mb-6 font-heading tracking-wide">Quick Links</h4>
+                    <h4 class="font-bold text-white mb-6 text-[12px] uppercase tracking-widest">Designs</h4>
                     <ul class="space-y-3 text-center md:text-left">
                         <li><a href="index.html"
-                                class="text-slate-400 hover:text-brand-accent font-medium text-sm transition-colors">Home</a>
+                                class="text-slate-400 hover:text-emerald-400 font-bold text-[11px] uppercase tracking-widest transition-colors">Home</a>
                         </li>
                         <li><a href="products.html"
-                                class="text-slate-400 hover:text-brand-accent font-medium text-sm transition-colors">All
-                                Products</a></li>
-                        <li><a href="products.html?filter=wedding"
-                                class="text-slate-400 hover:text-brand-accent font-medium text-sm transition-colors">Wedding
-                                Cards</a></li>
+                                class="text-slate-400 hover:text-emerald-400 font-bold text-[11px] uppercase tracking-widest transition-colors">Designs</a>
+                        </li>
                         <li><a href="contact.html"
-                                class="text-slate-400 hover:text-brand-accent font-medium text-sm transition-colors">Contact
-                                Us</a></li>
+                                class="text-slate-400 hover:text-emerald-400 font-bold text-[11px] uppercase tracking-widest transition-colors">Contact</a>
+                        </li>
                     </ul>
                 </div>
 
                 <!-- Contact Info & Socials -->
                 <div class="flex flex-col items-center md:items-start">
-                    <h4 class="font-bold text-white mb-6 font-heading tracking-wide">Get in Touch</h4>
+                    <h4 class="font-bold text-white mb-6 text-[12px] uppercase tracking-widest">Connect</h4>
                     <ul class="space-y-3 mb-6 text-center md:text-left w-full">
-                        <li class="flex items-center justify-center md:justify-start gap-3 text-sm text-slate-400">
-                            <i class='bx bx-phone text-brand-accent text-lg'></i>
-                            <a href="https://wa.me/94787354843" class="hover:text-brand-accent transition-colors">+94 78
-                                735 4843</a>
+                        <li
+                            class="flex items-center justify-center md:justify-start gap-3 text-[11px] text-slate-400 font-bold uppercase tracking-widest">
+                            <i class='bx bx-phone text-emerald-400 text-sm'></i>
+                            <a href="tel:+94787354843" class="hover:text-emerald-400 transition-colors">+94 78 735
+                                4843</a>
                         </li>
-                        <li class="flex items-center justify-center md:justify-start gap-3 text-sm text-slate-400">
-                            <i class='bx bx-envelope text-brand-accent text-lg'></i>
+                        <li
+                            class="flex items-center justify-center md:justify-start gap-3 text-[11px] text-slate-400 font-bold lowercase tracking-normal">
+                            <i class='bx bx-envelope text-emerald-400 text-sm'></i>
                             <a href="mailto:graphicsmotionstudio99@gmail.com"
-                                class="hover:text-brand-accent transition-colors">graphicsmotionstudio99@gmail.com</a>
+                                class="hover:text-emerald-400 transition-colors">graphicsmotionstudio99@gmail.com</a>
+                        </li>
+                        <li
+                            class="flex items-center justify-center md:justify-start gap-3 text-[11px] text-slate-400 font-bold uppercase tracking-widest">
+                            <i class='bx bx-map text-emerald-400 text-sm'></i>
+                            <span>Adhikarigama, Sri Lanka</span>
                         </li>
                     </ul>
 
                     <div class="flex space-x-3">
                         <a href="https://www.facebook.com/motiongraphicc" target="_blank"
-                            class="w-10 h-10 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-brand-accent hover:border-brand-accent transition-all shadow-sm">
+                            class="w-10 h-10 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-emerald-500 hover:border-emerald-500 transition-all">
                             <i class='bx bxl-facebook text-lg'></i>
                         </a>
-                        <a href="#"
-                            class="w-10 h-10 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-brand-accent hover:border-brand-accent transition-all shadow-sm">
-                            <i class='bx bxl-instagram text-lg'></i>
-                        </a>
                         <a href="https://wa.me/94787354843" target="_blank"
-                            class="w-10 h-10 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#25D366] hover:border-[#25D366] transition-all shadow-sm">
+                            class="w-10 h-10 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-emerald-500 hover:border-emerald-500 transition-all">
                             <i class='bx bxl-whatsapp text-lg'></i>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center text-sm text-slate-500 border-t border-slate-800 pt-8 mt-4 font-medium">
-                &copy; <span id="year"></span> Motion Graphic Studio. All rights reserved.
+            <div
+                class="text-center text-[10px] text-slate-500 border-t border-white/5 pt-8 mt-4 font-bold uppercase tracking-[0.2em]">
+                &copy; <span id="year"></span> Motion Graphic Studio.
             </div>
         </div>
     </footer>
 
     <!-- Design Lightbox Image Modal -->
     <div id="image-lightbox" style="display: none;"
-        class="modal-backdrop fixed inset-0 z-[100] items-center justify-center bg-slate-900/95 p-4 transition-opacity">
+        class="modal-backdrop fixed inset-0 z-[100] items-center justify-center bg-white/95 p-4 transition-opacity">
         <button id="lightbox-close"
-            class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-brand-accent transition-colors z-[101]">
-            <i class='bx bx-x text-3xl'></i>
+            class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-emerald-500 hover:text-white transition-all z-[101]">
+            <i class='bx bx-x text-2xl'></i>
         </button>
         <div
             class="modal-content relative max-w-5xl max-h-[90vh] w-full flex items-center justify-center pointer-events-none">
             <img id="lightbox-img" src="" alt="Enlarged Design"
-                class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl pointer-events-auto border border-white/10 p-2">
+                class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl pointer-events-auto border border-white p-1">
         </div>
     </div>
 

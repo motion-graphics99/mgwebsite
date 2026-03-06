@@ -16,3 +16,15 @@ if (!firebase.apps.length) {
 const auth = typeof firebase.auth === 'function' ? firebase.auth() : null;
 const db = typeof firebase.firestore === 'function' ? firebase.firestore() : null;
 const storage = typeof firebase.storage === 'function' ? firebase.storage() : null;
+
+// Enable Offline Persistence for Speed
+if (db) {
+    db.enablePersistence({ synchronizeTabs: true })
+        .catch((err) => {
+            if (err.code == 'failed-precondition') {
+                console.warn('Persistence failed: Multiple tabs open');
+            } else if (err.code == 'unimplemented') {
+                console.warn('Persistence is not supported by this browser');
+            }
+        });
+}
