@@ -160,19 +160,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function setupProductsFilter(initialFilter) {
     const mainButtons = document.querySelectorAll('.filter-btn');
-    const subButtons = document.querySelectorAll('.sub-filter-btn');
     const emptyState = document.getElementById('empty-state');
-    const subFiltersContainer = document.getElementById('wedding-sub-filters');
+    const subFiltersContainer = document.getElementById('dynamic-sub-filters') || document.getElementById('wedding-sub-filters');
 
     let currentMainFilter = 'all';
     let currentSubFilter = 'all';
+
+    function renderSubFilters(catId) {
+        if (!subFiltersContainer || !window.appCategories) return;
+        
+        const category = window.appCategories.find(c => c.id === catId);
+        if (!category || !category.subcategories || category.subcategories.length === 0) {
+            subFiltersContainer.innerHTML = '';
+            subFiltersContainer.classList.add('hidden');
+            subFiltersContainer.classList.remove('flex');
+            return;
+        }
+
+        subFiltersContainer.classList.remove('hidden');
+        subFiltersContainer.classList.add('flex');
+        
+        let html = `<button data-sub-filter="all" class="sub-filter-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all border border-slate-200 text-slate-600 hover:border-brand-accent hover:text-brand-accent active">All Items</button>`;
+        
+        category.subcategories.forEach(sub => {
+            const slug = sub.toLowerCase().replace(/\s+/g, '-');
+            html += `<button data-sub-filter="${slug}" class="sub-filter-btn px-4 py-1.5 rounded-full text-xs font-bold transition-all border border-slate-200 text-slate-600 hover:border-brand-accent hover:text-brand-accent">${sub}</button>`;
+        });
+        
+        subFiltersContainer.innerHTML = html;
+
+        // Reattach sub-listeners
+        const subButtons = document.querySelectorAll('.sub-filter-btn');
+        subButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentSubFilter = btn.getAttribute('data-sub-filter');
+                updateSubBtnStyles();
+                applyFilters();
+            });
+        });
+    }
 
     function applyFilters() {
         let foundAny = false;
         const currentItems = document.querySelectorAll('.portfolio-item');
 
         currentItems.forEach(item => {
-            // Apply transitions dynamically if missing
             if (!item.style.transition) {
                 item.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
             }
@@ -180,18 +212,15 @@ function setupProductsFilter(initialFilter) {
             const itemCat = item.getAttribute('data-category');
             const itemSize = item.getAttribute('data-size');
 
-            // Logic for match checks
             let mainMatch = (currentMainFilter === 'all' || itemCat === currentMainFilter);
             let subMatch = true;
 
-            // Apply sub filter if main is wedding
-            if (currentMainFilter === 'wedding' && currentSubFilter !== 'all') {
+            if (currentMainFilter !== 'all' && currentSubFilter !== 'all') {
                 subMatch = (itemSize === currentSubFilter);
             }
 
             if (mainMatch && subMatch) {
                 item.style.display = 'flex';
-                // Trigger layout reflow for CSS animation
                 void item.offsetWidth;
                 item.style.opacity = '1';
                 item.style.transform = 'scale(1) translateY(0)';
@@ -203,75 +232,47 @@ function setupProductsFilter(initialFilter) {
                     if (item.style.opacity === '0') {
                         item.style.display = 'none';
                     }
-                }, 400); // Wait for transition
+                }, 400); 
             }
         });
 
-        if (foundAny) {
-            emptyState.classList.add('hidden');
-        } else {
-            emptyState.classList.remove('hidden');
-        }
-
-        // Handle sub menu visibility
-        if (currentMainFilter === 'wedding') {
-            if (subFiltersContainer) {
-                subFiltersContainer.classList.remove('hidden');
-                subFiltersContainer.classList.add('flex');
-            }
-        } else {
-            if (subFiltersContainer) {
-                subFiltersContainer.classList.add('hidden');
-                subFiltersContainer.classList.remove('flex');
-                currentSubFilter = 'all'; // Reset sub filter
-                updateSubBtnStyles();
-            }
-        }
+        if (foundAny) emptyState.classList.add('hidden');
+        else emptyState.classList.remove('hidden');
     }
 
     function updateMainBtnStyles() {
-        // Just rely on the active class from our CSS
         mainButtons.forEach(b => b.classList.remove('active'));
         const activeBtn = Array.from(mainButtons).find(b => b.getAttribute('data-filter') === currentMainFilter);
-        if (activeBtn) {
-            activeBtn.classList.add('active');
-        }
+        if (activeBtn) activeBtn.classList.add('active');
     }
 
     function updateSubBtnStyles() {
-        // Just rely on the active class from our CSS
-        subButtons.forEach(b => b.classList.remove('active'));
+        const subButtons = document.querySelectorAll('.sub-filter-btn');
+        subButtons.forEach(b => b.classList.remove('active', 'bg-brand-accent', 'text-white', 'border-brand-accent'));
+        subButtons.forEach(b => b.classList.add('text-slate-600', 'border-slate-200'));
+        
         const activeBtn = Array.from(subButtons).find(b => b.getAttribute('data-sub-filter') === currentSubFilter);
         if (activeBtn) {
-            activeBtn.classList.add('active');
+            activeBtn.classList.remove('text-slate-600', 'border-slate-200');
+            activeBtn.classList.add('active', 'bg-brand-accent', 'text-white', 'border-brand-accent');
         }
     }
 
-    // Main Filters Listener
     mainButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             currentMainFilter = btn.getAttribute('data-filter');
             currentSubFilter = 'all';
             updateMainBtnStyles();
-            updateSubBtnStyles();
+            renderSubFilters(currentMainFilter);
             applyFilters();
         });
     });
 
-    // Sub Filters Listener
-    subButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            currentSubFilter = btn.getAttribute('data-sub-filter');
-            updateSubBtnStyles();
-            applyFilters();
-        });
-    });
-
-    // Default Load init
     if (initialFilter) {
         currentMainFilter = initialFilter;
     }
+    
     updateMainBtnStyles();
-    updateSubBtnStyles();
+    renderSubFilters(currentMainFilter);
     applyFilters();
 }
